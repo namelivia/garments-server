@@ -20,6 +20,7 @@ class TestApp:
             "name": "Test garment",
             "garment_type": "Shoe",
             "color": "red",
+            "place": "home",
             "status": "ok",
             "journaling_key": key,
         }
@@ -40,6 +41,7 @@ class TestApp:
                 "name": "Some test garment",
                 "garment_type": "shirt",
                 "color": "white",
+                "place": "home",
                 "status": "ok",
             },
         )
@@ -50,6 +52,7 @@ class TestApp:
             "garment_type": "shirt",
             "image": None,
             "color": "white",
+            "place": "home",
             "status": "ok",
             "journaling_key": key,
         }
@@ -85,6 +88,7 @@ class TestApp:
             "name": "Test garment",
             "garment_type": "Shoe",
             "color": "red",
+            "place": "home",
             "status": "ok",
             "image": None,
             "journaling_key": str(key),
@@ -106,6 +110,7 @@ class TestApp:
                 "name": "Test garment",
                 "garment_type": "Shoe",
                 "color": "red",
+                "place": "home",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -115,6 +120,7 @@ class TestApp:
                 "name": "Test garment",
                 "garment_type": "Shoe",
                 "color": "red",
+                "place": "home",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),

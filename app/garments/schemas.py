@@ -9,6 +9,7 @@ class GarmentBase(BaseModel):
     garment_type: str = Field(title="Type of the garment")
     color: str = Field(title="Color of the garment")
     status: str = Field(title="Status of the garment")
+    place: str = Field(title="Place of the garment")
     image: Optional[str] = Field(title="Image url for the garment")
 
 

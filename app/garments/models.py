@@ -12,5 +12,6 @@ class Garment(GarmentsBase):
     garment_type = Column(String, nullable=False)
     color = Column(String, nullable=False)
     status = Column(String, nullable=False)
+    place = Column(String, nullable=False)
     journaling_key = Column(GUID, nullable=False)
     image = Column(String)
