@@ -35,5 +35,8 @@ install = "*"
 [requires]
 python_version = "3.8"
 
+[scripts]
+image_loader = "python ./scripts/image_loader.py"
+
 [pipenv]
 allow_prereleases = true
