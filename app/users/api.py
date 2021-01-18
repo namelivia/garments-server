@@ -23,4 +23,6 @@ async def get_current_user(x_pomerium_jwt_assertion: Optional[str] = Header(None
             "verify_aud": False,
         },
     )
+    # TODO: This his harcoded for now
+    decoded["place"] = "Example Place"
     return decoded
