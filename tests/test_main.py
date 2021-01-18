@@ -73,8 +73,17 @@ class TestApp:
         response = client.get("/garments/99")
         assert response.status_code == 404
 
-    @pytest.mark.skip(reason="no longer valid")
-    def test_get_current_user(self, client):
+    @patch("app.users.jwt.JWT.get_current_user_info")
+    def test_get_current_user(self, m_get_user_info, client):
+        m_get_user_info.return_value = {
+            "aud": ["example"],
+            "email": "user@example.com",
+            "exp": 1237658,
+            "iat": 1237658,
+            "iss": "test.example.com",
+            "nbf": 1237658,
+            "sub": "user",
+        }
         response = client.get("/users/me")
         assert response.status_code == 200
         assert response.json() == {
@@ -85,6 +94,7 @@ class TestApp:
             "iss": "test.example.com",
             "nbf": 1237658,
             "sub": "user",
+            "place": None,
         }
 
     def test_get_existing_garment(self, client, database_test_session):
