@@ -7,8 +7,7 @@ from .test_base import (
     database_test_session,
 )
 from app.garments.models import Garment
-from app.garments.schemas import Garment as GarmentSchema
-import datetime
+from app.places.models import Place
 from freezegun import freeze_time
 
 
@@ -29,6 +28,16 @@ class TestApp:
         session.add(db_garment)
         session.commit()
         return db_garment
+
+    def _insert_test_place(self, session, place: dict = {}):
+        data = {
+            "name": "Test place",
+        }
+        data.update(place)
+        db_place = Place(**data)
+        session.add(db_place)
+        session.commit()
+        return db_place
 
     @patch("uuid.uuid4")
     @patch("app.notifications.notifications.Notifications.send")
@@ -149,3 +158,37 @@ class TestApp:
         # m_get.assert_called_with("http://images-service:80/image/image_path")
         assert response.status_code == 200
         assert response.content == b"image_binary_data"
+
+    def test_create_place(self, client):
+        response = client.post(
+            "/places",
+            json={
+                "name": "Some test place",
+            },
+        )
+        assert response.status_code == 201
+        assert response.json() == {
+            "id": 1,
+            "name": "Some test place",
+        }
+
+    def test_get_all_places(self, client, database_test_session):
+        self._insert_test_place(database_test_session, {"name": "test place 1"})
+        self._insert_test_place(database_test_session, {"name": "test place 2"})
+        response = client.get("/places")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "test place 1",
+            },
+            {
+                "id": 2,
+                "name": "test place 2",
+            },
+        ]
+
+    def test_delete_place(self, client, database_test_session):
+        self._insert_test_place(database_test_session)
+        response = client.delete("/places/1")
+        assert response.status_code == 204
