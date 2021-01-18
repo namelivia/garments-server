@@ -10,8 +10,16 @@ router = APIRouter(prefix="/garments", dependencies=[Depends(get_db)])
 
 
 @router.get("", response_model=List[schemas.Garment])
-def garments(db: Session = Depends(get_db), skip: int = 0, limit: int = 10):
-    garments = crud.get_garments(db)
+def garments(
+    db: Session = Depends(get_db),
+    skip: int = 0,
+    limit: int = 10,
+    place: Optional[str] = None,
+):
+    if place:
+        garments = crud.get_garments_for_place(db, place)
+    else:
+        garments = crud.get_garments(db)
     return garments
 
 

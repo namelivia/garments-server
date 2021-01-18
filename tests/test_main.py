@@ -192,3 +192,26 @@ class TestApp:
         self._insert_test_place(database_test_session)
         response = client.delete("/places/1")
         assert response.status_code == 204
+
+    def test_get_garments_by_place(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session, {"place": "place1", "journaling_key": key}
+        )
+        self._insert_test_garment(
+            database_test_session, {"place": "place2", "journaling_key": key}
+        )
+        response = client.get("/garments?place=place1")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "Test garment",
+                "garment_type": "Shoe",
+                "color": "red",
+                "place": "place1",
+                "status": "ok",
+                "image": None,
+                "journaling_key": str(key),
+            }
+        ]

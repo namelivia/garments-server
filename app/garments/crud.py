@@ -13,6 +13,10 @@ def get_garment(db: Session, garment_id: int):
     return db.query(models.Garment).filter(models.Garment.id == garment_id).first()
 
 
+def get_garments_for_place(db: Session, place: str):
+    return db.query(models.Garment).filter(models.Garment.place == place).all()
+
+
 # TODO: skip and limit
 def get_garments(db: Session):
     return db.query(models.Garment).all()
