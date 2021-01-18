@@ -4,6 +4,7 @@ import os
 from jwt import PyJWKClient
 from fastapi import APIRouter, Header
 import logging
+from . import crud
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,5 @@ async def get_current_user(x_pomerium_jwt_assertion: Optional[str] = Header(None
             "verify_aud": False,
         },
     )
-    # TODO: This his harcoded for now
-    decoded["place"] = "Example Place"
-    return decoded
+    user_data = crud.get_or_create_user_data(decoded["user"])
+    return {**decoded, **user_data.dict()}
