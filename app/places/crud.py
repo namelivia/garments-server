@@ -27,4 +27,4 @@ def create_place(db: Session, place: schemas.PlaceCreate):
 def delete_place(db: Session, garment: models.Place):
     db.delete(garment)
     db.commit()
-    logger.info("Garment deleted")
+    logger.info("Place deleted")

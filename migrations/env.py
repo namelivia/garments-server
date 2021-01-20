@@ -8,6 +8,7 @@ from alembic import context
 
 from app.garments.models import GarmentsBase
 from app.places.models import PlacesBase
+from app.garment_types.models import GarmentTypesBase
 from app.users.models import UserDataBase
 
 # this is the Alembic Config object, which provides
@@ -23,7 +24,12 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-target_metadata = [GarmentsBase.metadata, PlacesBase.metadata, UserDataBase.metadata]
+target_metadata = [
+    GarmentsBase.metadata,
+    PlacesBase.metadata,
+    GarmentTypesBase.metadata,
+    UserDataBase.metadata,
+]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

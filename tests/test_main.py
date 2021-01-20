@@ -8,6 +8,7 @@ from .test_base import (
 )
 from app.garments.models import Garment
 from app.places.models import Place
+from app.garment_types.models import GarmentType
 from freezegun import freeze_time
 
 
@@ -38,6 +39,16 @@ class TestApp:
         session.add(db_place)
         session.commit()
         return db_place
+
+    def _insert_test_garment_type(self, session, garment_type: dict = {}):
+        data = {
+            "name": "Test garment type",
+        }
+        data.update(garment_type)
+        db_garment_type = GarmentType(**data)
+        session.add(db_garment_type)
+        session.commit()
+        return db_garment_type
 
     @patch("uuid.uuid4")
     @patch("app.notifications.notifications.Notifications.send")
@@ -195,6 +206,26 @@ class TestApp:
             {
                 "id": 2,
                 "name": "test place 2",
+            },
+        ]
+
+    def test_get_all_garment_types(self, client, database_test_session):
+        self._insert_test_garment_type(
+            database_test_session, {"name": "test garment type 1"}
+        )
+        self._insert_test_garment_type(
+            database_test_session, {"name": "test garment type 2"}
+        )
+        response = client.get("/garment_types")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "test garment type 1",
+            },
+            {
+                "id": 2,
+                "name": "test garment type 2",
             },
         ]
 

@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class PlaceBase(BaseModel):
-    name: str = Field(title="Name for the garment")
+    name: str = Field(title="Name for the place")
 
 
 class PlaceCreate(PlaceBase):
