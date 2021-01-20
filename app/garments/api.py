@@ -15,12 +15,9 @@ def garments(
     skip: int = 0,
     limit: int = 10,
     place: Optional[str] = None,
+    garment_type: Optional[str] = None,
 ):
-    if place:
-        garments = crud.get_garments_for_place(db, place)
-    else:
-        garments = crud.get_garments(db)
-    return garments
+    return crud.get_garments(db, place, garment_type)
 
 
 def _get_garment(db: Session, garment_id: int):

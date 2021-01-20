@@ -18,8 +18,13 @@ def get_garments_for_place(db: Session, place: str):
 
 
 # TODO: skip and limit
-def get_garments(db: Session):
-    return db.query(models.Garment).all()
+def get_garments(db: Session, place: str = None, garment_type: str = None):
+    query = db.query(models.Garment)
+    if place is not None:
+        query = query.filter(models.Garment.place == place)
+    if garment_type is not None:
+        query = query.filter(models.Garment.garment_type == garment_type)
+    return query.all()
 
 
 def create_garment(db: Session, garment: schemas.GarmentCreate):

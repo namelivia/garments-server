@@ -225,3 +225,39 @@ class TestApp:
                 "journaling_key": str(key),
             }
         ]
+
+    def test_get_garments_by_place_and_type(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_1",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_2",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session, {"place": "place2", "journaling_key": key}
+        )
+        response = client.get("/garments?place=place1&garment_type=garment_type_1")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "Test garment",
+                "garment_type": "garment_type_1",
+                "color": "red",
+                "place": "place1",
+                "status": "ok",
+                "image": None,
+                "journaling_key": str(key),
+            }
+        ]
