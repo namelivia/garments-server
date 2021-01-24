@@ -67,6 +67,15 @@ def create_garment(garment: schemas.GarmentCreate, db: Session = Depends(get_db)
     return crud.create_garment(db, garment)
 
 
+@router.put("/{garment_id}", response_model=schemas.Garment, status_code=HTTPStatus.OK)
+def update_garment(
+    new_garment_data: schemas.GarmentUpdate,
+    db: Session = Depends(get_db),
+    garment_id: int = Path(None, title="The ID for the garment to update", ge=1),
+):
+    return crud.update_garment(db, garment_id, new_garment_data)
+
+
 @router.put("/{garment_id}", response_model=schemas.Garment)
 async def update_garment(
     garment_id: int = Path(None, title="The ID of the garment to update", ge=1),

@@ -17,6 +17,10 @@ class GarmentCreate(GarmentBase):
     pass
 
 
+class GarmentUpdate(GarmentBase):
+    pass
+
+
 class Garment(GarmentBase):
     id: int
     journaling_key: UUID = Field(title="Parent key for the journal entry")

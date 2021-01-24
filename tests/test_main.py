@@ -292,3 +292,22 @@ class TestApp:
                 "journaling_key": str(key),
             }
         ]
+
+    def test_updating_garment(self, client, database_test_session):
+        key = uuid.uuid4()
+        original_garment = self._insert_test_garment(
+            database_test_session, {"name": "Some name", "journaling_key": key}
+        )
+        response = client.put(
+            "/garments/1",
+            json={
+                "name": "Updated name",
+                "garment_type": original_garment.garment_type,
+                "color": original_garment.color,
+                "place": original_garment.place,
+                "status": "ok",
+                "journaling_key": str(key),
+            },
+        )
+        print(response.content)
+        assert response.status_code == 200

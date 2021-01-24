@@ -50,6 +50,28 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
     return db_garment
 
 
+def update_garment(
+    db: Session, garment_id: int, new_garment_data: schemas.GarmentUpdate
+):
+    garments = db.query(models.Garment).filter(models.Garment.id == garment_id)
+    garments.update(new_garment_data, synchronize_session=False)
+    db.commit()
+    garment = garments.first()
+    logger.info("Garment updated")
+    try:
+        Notifications.send(f"The garment {garment.name} has been updated")
+    except Exception as err:
+        logger.error(f"Notification could not be sent: {str(err)}")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"The garment {garment.name} has been updated",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment
+
+
 def delete_garment(db: Session, garment: models.Garment):
     db.delete(garment)
     db.commit()
