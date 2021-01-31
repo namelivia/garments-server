@@ -309,5 +309,14 @@ class TestApp:
                 "journaling_key": str(key),
             },
         )
-        print(response.content)
         assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Updated name",
+            "garment_type": "Shoe",
+            "color": "red",
+            "place": "home",
+            "status": "ok",
+            "image": None,
+            "journaling_key": str(key),
+        }
