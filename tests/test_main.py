@@ -323,8 +323,35 @@ class TestApp:
 
     def test_get_random_garment(self, client, database_test_session):
         key = uuid.uuid4()
-        self._insert_test_garment(database_test_session, {"journaling_key": key})
-        self._insert_test_garment(database_test_session, {"journaling_key": key})
-        response = client.get("/garments/random")
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_1",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_1",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_2",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session, {"place": "place2", "journaling_key": key}
+        )
+        response = client.get(
+            "/garments/random?place=place1&garment_type=garment_type_1"
+        )
         assert response.status_code == 200
         assert response.json()["id"] in (1, 2)

@@ -14,8 +14,12 @@ def get_garment(db: Session, garment_id: int):
     return db.query(models.Garment).filter(models.Garment.id == garment_id).first()
 
 
-def get_random_garment(db: Session):
+def get_random_garment(db: Session, place: str = None, garment_type: str = None):
     query = db.query(models.Garment)
+    if place is not None:
+        query = query.filter(models.Garment.place == place)
+    if garment_type is not None:
+        query = query.filter(models.Garment.garment_type == garment_type)
     row_count = int(query.count())
     return query.offset(int(row_count * random.random())).first()
 
