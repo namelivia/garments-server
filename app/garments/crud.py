@@ -5,12 +5,19 @@ import uuid
 from . import models, schemas
 from app.notifications.notifications import Notifications
 from app.journaling.journaling import Journaling
+import random
 
 logger = logging.getLogger(__name__)
 
 
 def get_garment(db: Session, garment_id: int):
     return db.query(models.Garment).filter(models.Garment.id == garment_id).first()
+
+
+def get_random_garment(db: Session):
+    query = db.query(models.Garment)
+    row_count = int(query.count())
+    return query.offset(int(row_count * random.random())).first()
 
 
 def get_garments_for_place(db: Session, place: str):

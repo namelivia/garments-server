@@ -29,6 +29,13 @@ def _get_garment(db: Session, garment_id: int):
     return db_garment
 
 
+@router.get("/random", response_model=schemas.Garment)
+def get_random_garment(
+    db: Session = Depends(get_db),
+):
+    return crud.get_random_garment(db)
+
+
 @router.get("/{garment_id}", response_model=schemas.Garment)
 def get_garment(
     garment_id: int = Path(None, title="The ID of the garment to get", ge=1),
