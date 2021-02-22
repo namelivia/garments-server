@@ -1,10 +1,8 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-PlacesBase = declarative_base()
+from app.database import Base
 
 
-class Place(PlacesBase):
+class Place(Base):
     __tablename__ = "places"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)

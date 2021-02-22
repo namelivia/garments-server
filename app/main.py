@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine, Base
 from app.garments.api import router as places
 from app.places.api import router as garments
 from app.images.api import router as images
@@ -8,8 +7,6 @@ from app.users.api import router as users
 from app.garment_types.api import router as garment_types
 import logging
 import sys
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
