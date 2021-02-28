@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec garments-server-app pipenv run pytest
+docker exec -it garments-server-app pipenv run pytest
