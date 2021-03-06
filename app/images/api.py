@@ -4,7 +4,7 @@ from fastapi import (
     UploadFile,
     Response,
 )
-from Typing import Optional
+from typing import Optional
 import httpx
 import requests
 import os
