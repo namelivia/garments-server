@@ -40,7 +40,7 @@ async def get_image(
     logger.info(original_url)
     scaled_url = (
         os.getenv("IMAGES_SERVICE_ENDPOINT")
-        + f"/unsafe/fit-in/{image_width}/"
+        + f"/unsafe/fit-in/{image_width}x0/"
         + original_url
     )
     logger.info(scaled_url)
