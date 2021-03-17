@@ -23,6 +23,9 @@ class TestApp:
             "place": "home",
             "status": "ok",
             "journaling_key": key,
+            "wear_to_wash": 1,
+            "worn": 0,
+            "washing": False,
         }
         data.update(garment)
         db_garment = Garment(**data)
@@ -63,6 +66,7 @@ class TestApp:
                 "color": "white",
                 "place": "home",
                 "status": "ok",
+                "wear_to_wash": 2,
             },
         )
         assert response.status_code == 201
@@ -75,6 +79,9 @@ class TestApp:
             "place": "home",
             "status": "ok",
             "journaling_key": key,
+            "wear_to_wash": 2,
+            "worn": 0,
+            "washing": False,
         }
         m_send_notification.assert_called_with(
             "A new garment called Some test garment has been created"
@@ -125,6 +132,9 @@ class TestApp:
             "status": "ok",
             "image": None,
             "journaling_key": str(key),
+            "wear_to_wash": 1,
+            "worn": 0,
+            "washing": False,
         }
 
     def test_create_garment_invalid(self, client):
@@ -147,6 +157,9 @@ class TestApp:
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "washing": False,
             },
             {
                 "id": 2,
@@ -157,6 +170,9 @@ class TestApp:
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "washing": False,
             },
         ]
 
@@ -257,6 +273,9 @@ class TestApp:
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "washing": False,
             }
         ]
 
@@ -293,6 +312,9 @@ class TestApp:
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "washing": False,
             }
         ]
 
@@ -310,6 +332,7 @@ class TestApp:
                 "place": original_garment.place,
                 "status": "ok",
                 "journaling_key": str(key),
+                "wear_to_wash": 4,
             },
         )
         assert response.status_code == 200
@@ -322,6 +345,9 @@ class TestApp:
             "status": "ok",
             "image": None,
             "journaling_key": str(key),
+            "wear_to_wash": 4,
+            "worn": 0,
+            "washing": False,
         }
 
     def test_get_random_garment(self, client, database_test_session):
@@ -342,6 +368,16 @@ class TestApp:
                 "journaling_key": key,
             },
         )
+        # Washing garments will be excluded
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "garment_type": "garment_type_1",
+                "journaling_key": key,
+                "washing": True,
+            },
+        )
         self._insert_test_garment(
             database_test_session,
             {
@@ -358,3 +394,67 @@ class TestApp:
         )
         assert response.status_code == 200
         assert response.json()["id"] in (1, 2)
+
+    def test_wear_garment(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session, {"worn": 0, "journaling_key": key, "wear_to_wash": 3}
+        )
+        response = client.post("/garments/1/wear")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test garment",
+            "garment_type": "Shoe",
+            "image": None,
+            "color": "red",
+            "place": "home",
+            "status": "ok",
+            "journaling_key": str(key),
+            "wear_to_wash": 3,
+            "worn": 1,
+            "washing": False,
+        }
+
+    def test_wear_garment_sets_washing(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session, {"worn": 2, "journaling_key": key, "wear_to_wash": 3}
+        )
+        response = client.post("/garments/1/wear")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test garment",
+            "garment_type": "Shoe",
+            "image": None,
+            "color": "red",
+            "place": "home",
+            "status": "ok",
+            "journaling_key": str(key),
+            "wear_to_wash": 3,
+            "worn": 3,
+            "washing": True,
+        }
+
+    def test_wash_garment(self, client, database_test_session):
+        key = uuid.uuid4()
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session, {"worn": 2, "journaling_key": key, "washing": True}
+        )
+        response = client.post("/garments/1/wash")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test garment",
+            "garment_type": "Shoe",
+            "image": None,
+            "color": "red",
+            "place": "home",
+            "status": "ok",
+            "journaling_key": str(key),
+            "wear_to_wash": 1,
+            "worn": 0,
+            "washing": False,
+        }

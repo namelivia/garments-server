@@ -103,3 +103,19 @@ async def delete_garment(
 ):
     crud.delete_garment(db, _get_garment(db, garment_id))
     return Response(status_code=HTTPStatus.NO_CONTENT)
+
+
+@router.post("/{garment_id}/wear")
+async def wear_garment(
+    garment_id: int = Path(None, title="The ID of the garment to wear", ge=1),
+    db: Session = Depends(get_db),
+):
+    return crud.wear(db, _get_garment(db, garment_id))
+
+
+@router.post("/{garment_id}/wash")
+async def wash_garment(
+    garment_id: int = Path(None, title="The ID of the garment to wash", ge=1),
+    db: Session = Depends(get_db),
+):
+    return crud.wash(db, _get_garment(db, garment_id))

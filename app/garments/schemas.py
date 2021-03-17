@@ -10,6 +10,7 @@ class GarmentBase(BaseModel):
     color: str = Field(title="Color of the garment")
     status: str = Field(title="Status of the garment")
     place: str = Field(title="Place of the garment")
+    wear_to_wash: int = Field(title="Times to wear before washing")
     image: Optional[str] = Field(title="Image url for the garment")
 
 
@@ -23,6 +24,8 @@ class GarmentUpdate(GarmentBase):
 
 class Garment(GarmentBase):
     id: int
+    worn: int = Field(title="Times worn")
+    washing: bool = Field(title="If the garment is pending to be washed")
     journaling_key: UUID = Field(title="Parent key for the journal entry")
 
     class Config:

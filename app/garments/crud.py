@@ -15,7 +15,7 @@ def get_garment(db: Session, garment_id: int):
 
 
 def get_random_garment(db: Session, place: str = None, garment_type: str = None):
-    query = db.query(models.Garment)
+    query = db.query(models.Garment).filter(models.Garment.washing == 0)
     if place is not None:
         query = query.filter(models.Garment.place == place)
     if garment_type is not None:
@@ -42,6 +42,8 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
     db_garment = models.Garment(
         **garment.dict(),
         journaling_key=uuid.uuid4(),
+        worn=0,
+        washing=False,
     )
     db.add(db_garment)
     db.commit()
@@ -87,3 +89,35 @@ def delete_garment(db: Session, garment: models.Garment):
     db.delete(garment)
     db.commit()
     logger.info("Garment deleted")
+
+
+def wear(db: Session, garment: models.Garment):
+    garment.worn += 1
+    garment.washing = garment.worn >= garment.wear_to_wash
+    db.commit()
+    db.refresh(garment)
+    logger.info("Wearing garment {garment.name}")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"Wearing {garment.name}",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment
+
+
+def wash(db: Session, garment: models.Garment):
+    garment.worn = 0
+    garment.washing = False
+    db.commit()
+    db.refresh(garment)
+    logger.info("Washing garment {garment.name}")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"Garment {garment.name} has been washed",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment

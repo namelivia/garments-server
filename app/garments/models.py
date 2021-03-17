@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from fastapi_utils.guid_type import GUID
 from app.database import Base
 
@@ -12,4 +12,7 @@ class Garment(Base):
     status = Column(String, nullable=False)
     place = Column(String, nullable=False)
     journaling_key = Column(GUID, nullable=False)
+    worn = Column(Integer, nullable=False)
+    wear_to_wash = Column(Integer, nullable=False)
+    washing = Column(Boolean, nullable=False)
     image = Column(String)
