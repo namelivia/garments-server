@@ -54,8 +54,7 @@ class TestApp:
         return db_garment_type
 
     @patch("uuid.uuid4")
-    @patch("app.notifications.notifications.Notifications.send")
-    def test_create_garment(self, m_send_notification, m_uuid, client):
+    def test_create_garment(self, m_uuid, client):
         key = "271c973a-638f-4e01-9a79-308c880e3d11"
         m_uuid.return_value = key
         response = client.post(
@@ -83,9 +82,6 @@ class TestApp:
             "worn": 0,
             "washing": False,
         }
-        m_send_notification.assert_called_with(
-            "A new garment called Some test garment has been created"
-        )
 
     def test_get_non_existing_garment(self, client):
         response = client.get("/garments/99")
