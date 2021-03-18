@@ -14,7 +14,7 @@ def get_garment(db: Session, garment_id: int):
 
 
 def get_random_garment(db: Session, place: str = None, garment_type: str = None):
-    query = db.query(models.Garment).filter(models.Garment.washing == 0)
+    query = db.query(models.Garment).filter(models.Garment.washing == False)
     if place is not None:
         query = query.filter(models.Garment.place == place)
     if garment_type is not None:
@@ -38,7 +38,7 @@ def get_garments(db: Session, place: str = None, garment_type: str = None):
 
 
 def get_washing_garments(db: Session):
-    query = db.query(models.Garment).filter(models.Garment.washing == 1)
+    query = db.query(models.Garment).filter(models.Garment.washing == True)
     return query.all()
 
 
