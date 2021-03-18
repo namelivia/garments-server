@@ -37,6 +37,11 @@ def get_garments(db: Session, place: str = None, garment_type: str = None):
     return query.all()
 
 
+def get_washing_garments(db: Session):
+    query = db.query(models.Garment).filter(models.Garment.washing == 1)
+    return query.all()
+
+
 def create_garment(db: Session, garment: schemas.GarmentCreate):
     db_garment = models.Garment(
         **garment.dict(),

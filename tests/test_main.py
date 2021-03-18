@@ -172,6 +172,30 @@ class TestApp:
             },
         ]
 
+    def test_get_washing_garments(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(database_test_session, {"journaling_key": key})
+        self._insert_test_garment(
+            database_test_session, {"journaling_key": key, "washing": True}
+        )
+        response = client.get("/garments/washing")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 2,
+                "name": "Test garment",
+                "garment_type": "Shoe",
+                "color": "red",
+                "place": "home",
+                "status": "ok",
+                "image": None,
+                "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "washing": True,
+            },
+        ]
+
     def test_delete_non_existing_garment(self, client):
         response = client.get("/garments/99")
         assert response.status_code == 404

@@ -38,6 +38,13 @@ def get_random_garment(
     return crud.get_random_garment(db, place, garment_type)
 
 
+@router.get("/washing", response_model=List[schemas.Garment])
+def washing_garments(
+    db: Session = Depends(get_db),
+):
+    return crud.get_washing_garments(db)
+
+
 @router.get("/{garment_id}", response_model=schemas.Garment)
 def get_garment(
     garment_id: int = Path(None, title="The ID of the garment to get", ge=1),
