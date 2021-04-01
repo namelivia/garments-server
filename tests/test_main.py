@@ -25,6 +25,7 @@ class TestApp:
             "journaling_key": key,
             "wear_to_wash": 1,
             "worn": 0,
+            "total_worn": 0,
             "washing": False,
         }
         data.update(garment)
@@ -80,6 +81,7 @@ class TestApp:
             "journaling_key": key,
             "wear_to_wash": 2,
             "worn": 0,
+            "total_worn": 0,
             "washing": False,
         }
 
@@ -130,6 +132,7 @@ class TestApp:
             "journaling_key": str(key),
             "wear_to_wash": 1,
             "worn": 0,
+            "total_worn": 0,
             "washing": False,
         }
 
@@ -155,6 +158,7 @@ class TestApp:
                 "journaling_key": str(key),
                 "wear_to_wash": 1,
                 "worn": 0,
+                "total_worn": 0,
                 "washing": False,
             },
             {
@@ -168,6 +172,7 @@ class TestApp:
                 "journaling_key": str(key),
                 "wear_to_wash": 1,
                 "worn": 0,
+                "total_worn": 0,
                 "washing": False,
             },
         ]
@@ -192,6 +197,7 @@ class TestApp:
                 "journaling_key": str(key),
                 "wear_to_wash": 1,
                 "worn": 0,
+                "total_worn": 0,
                 "washing": True,
             },
         ]
@@ -295,6 +301,7 @@ class TestApp:
                 "journaling_key": str(key),
                 "wear_to_wash": 1,
                 "worn": 0,
+                "total_worn": 0,
                 "washing": False,
             }
         ]
@@ -334,6 +341,7 @@ class TestApp:
                 "journaling_key": str(key),
                 "wear_to_wash": 1,
                 "worn": 0,
+                "total_worn": 0,
                 "washing": False,
             }
         ]
@@ -367,6 +375,7 @@ class TestApp:
             "journaling_key": str(key),
             "wear_to_wash": 4,
             "worn": 0,
+            "total_worn": 0,
             "washing": False,
         }
 
@@ -418,7 +427,7 @@ class TestApp:
     def test_wear_garment(self, client, database_test_session):
         key = uuid.uuid4()
         self._insert_test_garment(
-            database_test_session, {"worn": 0, "journaling_key": key, "wear_to_wash": 3}
+            database_test_session, {"journaling_key": key, "wear_to_wash": 3}
         )
         response = client.post("/garments/1/wear")
         assert response.status_code == 200
@@ -433,13 +442,15 @@ class TestApp:
             "journaling_key": str(key),
             "wear_to_wash": 3,
             "worn": 1,
+            "total_worn": 1,
             "washing": False,
         }
 
     def test_wear_garment_sets_washing(self, client, database_test_session):
         key = uuid.uuid4()
         self._insert_test_garment(
-            database_test_session, {"worn": 2, "journaling_key": key, "wear_to_wash": 3}
+            database_test_session,
+            {"total_worn": 2, "worn": 2, "journaling_key": key, "wear_to_wash": 3},
         )
         response = client.post("/garments/1/wear")
         assert response.status_code == 200
@@ -454,6 +465,7 @@ class TestApp:
             "journaling_key": str(key),
             "wear_to_wash": 3,
             "worn": 3,
+            "total_worn": 3,
             "washing": True,
         }
 
@@ -461,7 +473,8 @@ class TestApp:
         key = uuid.uuid4()
         key = uuid.uuid4()
         self._insert_test_garment(
-            database_test_session, {"worn": 2, "journaling_key": key, "washing": True}
+            database_test_session,
+            {"worn": 2, "total_worn": 2, "journaling_key": key, "washing": True},
         )
         response = client.post("/garments/1/wash")
         assert response.status_code == 200
@@ -476,5 +489,6 @@ class TestApp:
             "journaling_key": str(key),
             "wear_to_wash": 1,
             "worn": 0,
+            "total_worn": 2,
             "washing": False,
         }

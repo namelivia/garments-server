@@ -47,6 +47,7 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
         **garment.dict(),
         journaling_key=uuid.uuid4(),
         worn=0,
+        total_worn=0,
         washing=False,
     )
     db.add(db_garment)
@@ -89,6 +90,7 @@ def delete_garment(db: Session, garment: models.Garment):
 
 def wear(db: Session, garment: models.Garment):
     garment.worn += 1
+    garment.total_worn += 1
     garment.washing = garment.worn >= garment.wear_to_wash
     db.commit()
     db.refresh(garment)

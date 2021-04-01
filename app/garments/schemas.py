@@ -25,6 +25,7 @@ class GarmentUpdate(GarmentBase):
 class Garment(GarmentBase):
     id: int
     worn: int = Field(title="Times worn")
+    total_worn: int = Field(title="Total times worn")
     washing: bool = Field(title="If the garment is pending to be washed")
     journaling_key: UUID = Field(title="Parent key for the journal entry")
 
