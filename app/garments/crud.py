@@ -68,7 +68,7 @@ def update_garment(
     db: Session, garment_id: int, new_garment_data: schemas.GarmentUpdate
 ):
     garments = db.query(models.Garment).filter(models.Garment.id == garment_id)
-    garments.update(new_garment_data, synchronize_session=False)
+    garments.update(new_garment_data.dict(), synchronize_session=False)
     db.commit()
     garment = garments.first()
     logger.info("Garment updated")
