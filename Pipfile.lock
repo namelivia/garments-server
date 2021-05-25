@@ -590,11 +590,11 @@
         },
         "sqlalchemy-utils": {
             "hashes": [
-                "sha256:63441742f95fc1c19e9aded4aaf9d6fb5c524af4fe502c94438f9fed0c1c1ea0",
-                "sha256:83ae7e15086511b3e00e52247d7a77d1e88778e0dd3226950903f0bd6065dd1c"
+                "sha256:2351c0a0f9158b215a56bef19c6670e10c666c593cee3f0d337259227e5ee8be",
+                "sha256:f5311d4ded66ec661b436e796ea6656dd8b7d764bf21919385d198ac75c6902d"
             ],
             "index": "pypi",
-            "version": "==0.37.3"
+            "version": "==0.37.4"
         },
         "starlette": {
             "hashes": [
