@@ -27,6 +27,7 @@ class TestApp:
             "worn": 0,
             "total_worn": 0,
             "washing": False,
+            "thrown_away": False,
         }
         data.update(garment)
         db_garment = Garment(**data)
@@ -83,6 +84,7 @@ class TestApp:
             "worn": 0,
             "total_worn": 0,
             "washing": False,
+            "thrown_away": False,
         }
 
     def test_get_non_existing_garment(self, client):
@@ -134,6 +136,7 @@ class TestApp:
             "worn": 0,
             "total_worn": 0,
             "washing": False,
+            "thrown_away": False,
         }
 
     def test_create_garment_invalid(self, client):
@@ -160,6 +163,7 @@ class TestApp:
                 "worn": 0,
                 "total_worn": 0,
                 "washing": False,
+                "thrown_away": False,
             },
             {
                 "id": 2,
@@ -174,6 +178,7 @@ class TestApp:
                 "worn": 0,
                 "total_worn": 0,
                 "washing": False,
+                "thrown_away": False,
             },
         ]
 
@@ -199,6 +204,7 @@ class TestApp:
                 "worn": 0,
                 "total_worn": 0,
                 "washing": True,
+                "thrown_away": False,
             },
         ]
 
@@ -303,6 +309,7 @@ class TestApp:
                 "worn": 0,
                 "total_worn": 0,
                 "washing": False,
+                "thrown_away": False,
             }
         ]
 
@@ -343,6 +350,7 @@ class TestApp:
                 "worn": 0,
                 "total_worn": 0,
                 "washing": False,
+                "thrown_away": False,
             }
         ]
 
@@ -377,6 +385,7 @@ class TestApp:
             "worn": 0,
             "total_worn": 0,
             "washing": False,
+            "thrown_away": False,
         }
 
     def test_get_random_garment(self, client, database_test_session):
@@ -405,6 +414,7 @@ class TestApp:
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
                 "washing": True,
+                "thrown_away": False,
             },
         )
         self._insert_test_garment(
@@ -444,6 +454,7 @@ class TestApp:
             "worn": 1,
             "total_worn": 1,
             "washing": False,
+            "thrown_away": False,
         }
 
     def test_wear_garment_sets_washing(self, client, database_test_session):
@@ -467,6 +478,7 @@ class TestApp:
             "worn": 3,
             "total_worn": 3,
             "washing": True,
+            "thrown_away": False,
         }
 
     def test_wash_garment(self, client, database_test_session):
@@ -474,7 +486,13 @@ class TestApp:
         key = uuid.uuid4()
         self._insert_test_garment(
             database_test_session,
-            {"worn": 2, "total_worn": 2, "journaling_key": key, "washing": True},
+            {
+                "worn": 2,
+                "total_worn": 2,
+                "journaling_key": key,
+                "washing": True,
+                "thrown_away": False,
+            },
         )
         response = client.post("/garments/1/wash")
         assert response.status_code == 200
@@ -491,4 +509,5 @@ class TestApp:
             "worn": 0,
             "total_worn": 2,
             "washing": False,
+            "thrown_away": False,
         }

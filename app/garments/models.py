@@ -16,4 +16,5 @@ class Garment(Base):
     total_worn = Column(Integer, nullable=False)
     wear_to_wash = Column(Integer, nullable=False)
     washing = Column(Boolean, nullable=False)
+    thrown_away = Column(Boolean, nullable=False)
     image = Column(String)

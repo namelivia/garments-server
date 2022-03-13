@@ -49,6 +49,7 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
         worn=0,
         total_worn=0,
         washing=False,
+        thrown_away=False,
     )
     db.add(db_garment)
     db.commit()
