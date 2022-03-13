@@ -14,7 +14,10 @@ def get_garment(db: Session, garment_id: int):
 
 
 def get_random_garment(db: Session, place: str = None, garment_type: str = None):
-    query = db.query(models.Garment).filter(models.Garment.washing == False)
+    query = db.query(models.Garment).filter(
+        models.Garment.washing == False,
+        models.Garment.thrown_away == False,
+    )
     if place is not None:
         query = query.filter(models.Garment.place == place)
     if garment_type is not None:
@@ -29,7 +32,7 @@ def get_garments_for_place(db: Session, place: str):
 
 # TODO: skip and limit
 def get_garments(db: Session, place: str = None, garment_type: str = None):
-    query = db.query(models.Garment)
+    query = db.query(models.Garment).filter(models.Garment.thrown_away == False)
     if place is not None:
         query = query.filter(models.Garment.place == place)
     if garment_type is not None:
@@ -38,7 +41,14 @@ def get_garments(db: Session, place: str = None, garment_type: str = None):
 
 
 def get_washing_garments(db: Session):
-    query = db.query(models.Garment).filter(models.Garment.washing == True)
+    query = db.query(models.Garment).filter(
+        models.Garment.washing == True, models.Garment.thrown_away == False
+    )
+    return query.all()
+
+
+def get_thrown_away_garments(db: Session):
+    query = db.query(models.Garment).filter(models.Garment.thrown_away == True)
     return query.all()
 
 
@@ -116,6 +126,22 @@ def wash(db: Session, garment: models.Garment):
         Journaling.create(
             garment.journaling_key,
             f"Garment {garment.name} has been washed",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment
+
+
+def throw_away(db: Session, garment: models.Garment):
+    garment.washing = False
+    garment.thrown_away = True
+    db.commit()
+    db.refresh(garment)
+    logger.info("Throwing away garment {garment.name}")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"Garment {garment.name} has been thrown_away",
         )
     except Exception as err:
         logger.error(f"Could not add journal entry: {str(err)}")

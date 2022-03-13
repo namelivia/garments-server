@@ -147,6 +147,10 @@ class TestApp:
         key = uuid.uuid4()
         self._insert_test_garment(database_test_session, {"journaling_key": key})
         self._insert_test_garment(database_test_session, {"journaling_key": key})
+        # This won't be included in the response
+        self._insert_test_garment(
+            database_test_session, {"journaling_key": key, "thrown_away": True}
+        )
         response = client.get("/garments")
         assert response.status_code == 200
         assert response.json() == [
@@ -205,6 +209,32 @@ class TestApp:
                 "total_worn": 0,
                 "washing": True,
                 "thrown_away": False,
+            },
+        ]
+
+    def test_get_thrown_away_garments(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(database_test_session, {"journaling_key": key})
+        self._insert_test_garment(
+            database_test_session, {"journaling_key": key, "thrown_away": True}
+        )
+        response = client.get("/garments/thrown_away")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 2,
+                "name": "Test garment",
+                "garment_type": "Shoe",
+                "color": "red",
+                "place": "home",
+                "status": "ok",
+                "image": None,
+                "journaling_key": str(key),
+                "wear_to_wash": 1,
+                "worn": 0,
+                "total_worn": 0,
+                "washing": False,
+                "thrown_away": True,
             },
         ]
 
@@ -510,4 +540,33 @@ class TestApp:
             "total_worn": 2,
             "washing": False,
             "thrown_away": False,
+        }
+
+    def test_throw_away_garment(self, client, database_test_session):
+        key = uuid.uuid4()
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "journaling_key": key,
+                "washing": True,
+                "thrown_away": False,
+            },
+        )
+        response = client.post("/garments/1/throw_away")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test garment",
+            "garment_type": "Shoe",
+            "image": None,
+            "color": "red",
+            "place": "home",
+            "status": "ok",
+            "journaling_key": str(key),
+            "wear_to_wash": 1,
+            "worn": 0,
+            "total_worn": 0,
+            "washing": False,
+            "thrown_away": True,
         }
