@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.garments.api import router as places
-from app.places.api import router as garments
+from app.garments.api import router as garments
+from app.places.api import router as places
+from app.activities.api import router as activities
 from app.images.api import router as images
 from app.users.api import router as users
 from app.garment_types.api import router as garment_types
@@ -27,6 +28,7 @@ app.add_middleware(
     for router in [
         garments,
         places,
+        activities,
         images,
         users,
         garment_types,

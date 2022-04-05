@@ -1,4 +1,5 @@
 TRUNCATE garment_types CASCADE;
 TRUNCATE places CASCADE;
+TRUNCATE activities CASCADE;
 TRUNCATE user_data CASCADE;
 TRUNCATE garments CASCADE;

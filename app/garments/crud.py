@@ -13,7 +13,9 @@ def get_garment(db: Session, garment_id: int):
     return db.query(models.Garment).filter(models.Garment.id == garment_id).first()
 
 
-def get_random_garment(db: Session, place: str = None, garment_type: str = None):
+def get_random_garment(
+    db: Session, place: str = None, garment_type: str = None, activity: str = None
+):
     query = db.query(models.Garment).filter(
         models.Garment.washing == False,
         models.Garment.thrown_away == False,
@@ -22,6 +24,8 @@ def get_random_garment(db: Session, place: str = None, garment_type: str = None)
         query = query.filter(models.Garment.place == place)
     if garment_type is not None:
         query = query.filter(models.Garment.garment_type == garment_type)
+    if activity is not None:
+        query = query.filter(models.Garment.activity == activity)
     row_count = int(query.count())
     return query.offset(int(row_count * random.random())).first()
 
@@ -31,10 +35,14 @@ def get_garments_for_place(db: Session, place: str):
 
 
 # TODO: skip and limit
-def get_garments(db: Session, place: str = None, garment_type: str = None):
+def get_garments(
+    db: Session, place: str = None, garment_type: str = None, activity: str = None
+):
     query = db.query(models.Garment).filter(models.Garment.thrown_away == False)
     if place is not None:
         query = query.filter(models.Garment.place == place)
+    if activity is not None:
+        query = query.filter(models.Garment.activity == activity)
     if garment_type is not None:
         query = query.filter(models.Garment.garment_type == garment_type)
     return query.all()

@@ -8,6 +8,7 @@ from .test_base import (
 )
 from app.garments.models import Garment
 from app.places.models import Place
+from app.activities.models import Activity
 from app.garment_types.models import GarmentType
 from freezegun import freeze_time
 
@@ -21,6 +22,7 @@ class TestApp:
             "garment_type": "Shoe",
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": key,
             "wear_to_wash": 1,
@@ -45,6 +47,16 @@ class TestApp:
         session.commit()
         return db_place
 
+    def _insert_test_activity(self, session, activity: dict = {}):
+        data = {
+            "name": "Test activity",
+        }
+        data.update(activity)
+        db_activity = Activity(**data)
+        session.add(db_activity)
+        session.commit()
+        return db_activity
+
     def _insert_test_garment_type(self, session, garment_type: dict = {}):
         data = {
             "name": "Test garment type",
@@ -66,6 +78,7 @@ class TestApp:
                 "garment_type": "shirt",
                 "color": "white",
                 "place": "home",
+                "activity": "everyday",
                 "status": "ok",
                 "wear_to_wash": 2,
             },
@@ -78,6 +91,7 @@ class TestApp:
             "image": None,
             "color": "white",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": key,
             "wear_to_wash": 2,
@@ -129,6 +143,7 @@ class TestApp:
             "garment_type": "Shoe",
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "image": None,
             "journaling_key": str(key),
@@ -160,6 +175,7 @@ class TestApp:
                 "garment_type": "Shoe",
                 "color": "red",
                 "place": "home",
+                "activity": "everyday",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -175,6 +191,7 @@ class TestApp:
                 "garment_type": "Shoe",
                 "color": "red",
                 "place": "home",
+                "activity": "everyday",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -201,6 +218,7 @@ class TestApp:
                 "garment_type": "Shoe",
                 "color": "red",
                 "place": "home",
+                "activity": "everyday",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -227,6 +245,7 @@ class TestApp:
                 "garment_type": "Shoe",
                 "color": "red",
                 "place": "home",
+                "activity": "everyday",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -290,6 +309,22 @@ class TestApp:
             },
         ]
 
+    def test_get_all_activities(self, client, database_test_session):
+        self._insert_test_activity(database_test_session, {"name": "test activity 1"})
+        self._insert_test_activity(database_test_session, {"name": "test activity 2"})
+        response = client.get("/activities")
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "test activity 1",
+            },
+            {
+                "id": 2,
+                "name": "test activity 2",
+            },
+        ]
+
     def test_get_all_garment_types(self, client, database_test_session):
         self._insert_test_garment_type(
             database_test_session, {"name": "test garment type 1"}
@@ -315,6 +350,11 @@ class TestApp:
         response = client.delete("/places/1")
         assert response.status_code == 204
 
+    def test_delete_activity(self, client, database_test_session):
+        self._insert_test_activity(database_test_session)
+        response = client.delete("/activities/1")
+        assert response.status_code == 204
+
     def test_get_garments_by_place(self, client, database_test_session):
         key = uuid.uuid4()
         self._insert_test_garment(
@@ -332,6 +372,7 @@ class TestApp:
                 "garment_type": "Shoe",
                 "color": "red",
                 "place": "place1",
+                "activity": "everyday",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -343,12 +384,15 @@ class TestApp:
             }
         ]
 
-    def test_get_garments_by_place_and_type(self, client, database_test_session):
+    def test_get_garments_by_place_type_and_activity(
+        self, client, database_test_session
+    ):
         key = uuid.uuid4()
         self._insert_test_garment(
             database_test_session,
             {
                 "place": "place1",
+                "activity": "everyday",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
             },
@@ -357,22 +401,23 @@ class TestApp:
             database_test_session,
             {
                 "place": "place1",
-                "garment_type": "garment_type_2",
+                "activity": "running",
+                "garment_type": "garment_type_1",
                 "journaling_key": key,
             },
         )
-        self._insert_test_garment(
-            database_test_session, {"place": "place2", "journaling_key": key}
+        response = client.get(
+            "/garments?place=place1&garment_type=garment_type_1&activity=running"
         )
-        response = client.get("/garments?place=place1&garment_type=garment_type_1")
         assert response.status_code == 200
         assert response.json() == [
             {
-                "id": 1,
+                "id": 2,
                 "name": "Test garment",
                 "garment_type": "garment_type_1",
                 "color": "red",
                 "place": "place1",
+                "activity": "running",
                 "status": "ok",
                 "image": None,
                 "journaling_key": str(key),
@@ -396,6 +441,7 @@ class TestApp:
                 "garment_type": original_garment.garment_type,
                 "color": original_garment.color,
                 "place": original_garment.place,
+                "activity": original_garment.activity,
                 "status": "ok",
                 "journaling_key": str(key),
                 "wear_to_wash": 4,
@@ -408,6 +454,7 @@ class TestApp:
             "garment_type": "Shoe",
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "image": None,
             "journaling_key": str(key),
@@ -425,6 +472,7 @@ class TestApp:
             {
                 "place": "place1",
                 "garment_type": "garment_type_1",
+                "activity": "running",
                 "journaling_key": key,
             },
         )
@@ -432,6 +480,16 @@ class TestApp:
             database_test_session,
             {
                 "place": "place1",
+                "activity": "running",
+                "garment_type": "garment_type_1",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "place": "place1",
+                "activity": "everyday",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
             },
@@ -459,7 +517,7 @@ class TestApp:
             database_test_session, {"place": "place2", "journaling_key": key}
         )
         response = client.get(
-            "/garments/random?place=place1&garment_type=garment_type_1"
+            "/garments/random?place=place1&garment_type=garment_type_1&activity=running"
         )
         assert response.status_code == 200
         assert response.json()["id"] in (1, 2)
@@ -478,6 +536,7 @@ class TestApp:
             "image": None,
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": str(key),
             "wear_to_wash": 3,
@@ -502,6 +561,7 @@ class TestApp:
             "image": None,
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": str(key),
             "wear_to_wash": 3,
@@ -533,6 +593,7 @@ class TestApp:
             "image": None,
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": str(key),
             "wear_to_wash": 1,
@@ -562,6 +623,7 @@ class TestApp:
             "image": None,
             "color": "red",
             "place": "home",
+            "activity": "everyday",
             "status": "ok",
             "journaling_key": str(key),
             "wear_to_wash": 1,

@@ -16,8 +16,9 @@ def garments(
     limit: int = 10,
     place: Optional[str] = None,
     garment_type: Optional[str] = None,
+    activity: Optional[str] = None,
 ):
-    return crud.get_garments(db, place, garment_type)
+    return crud.get_garments(db, place, garment_type, activity)
 
 
 def _get_garment(db: Session, garment_id: int):
@@ -34,8 +35,9 @@ def get_random_garment(
     place: Optional[str] = None,
     garment_type: Optional[str] = None,
     db: Session = Depends(get_db),
+    activity: Optional[str] = None,
 ):
-    return crud.get_random_garment(db, place, garment_type)
+    return crud.get_random_garment(db, place, garment_type, activity)
 
 
 @router.get("/washing", response_model=List[schemas.Garment])
