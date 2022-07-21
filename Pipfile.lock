@@ -554,7 +554,7 @@
         "pyjwt": {
             "editable": true,
             "git": "https://github.com/jpadilla/pyjwt.git",
-            "ref": "c8fda69f09bc293960c141288633fbd1399e0b2b"
+            "ref": "0bef0fbff5c245668578a43774d8620bdba4a6f7"
         },
         "pyparsing": {
             "hashes": [
@@ -904,11 +904,11 @@
         },
         "identify": {
             "hashes": [
-                "sha256:0dca2ea3e4381c435ef9c33ba100a78a9b40c0bab11189c7cf121f75815efeaa",
-                "sha256:3d11b16f3fe19f52039fb7e39c9c884b21cb1b586988114fbe42671f03de3e82"
+                "sha256:a3d4c096b384d50d5e6dc5bc8b9bc44f1f61cefebd750a7b3e9f939b53fb214d",
+                "sha256:feaa9db2dc0ce333b453ce171c0cf1247bbfde2c55fc6bb785022d411a1b78b5"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.5.1"
+            "version": "==2.5.2"
         },
         "idna": {
             "hashes": [
@@ -1005,10 +1005,10 @@
         },
         "pudb": {
             "hashes": [
-                "sha256:db3bdd66423c9d29074c1c2c49fcb224bd0d6f08319fed1b4e7ead683914083f"
+                "sha256:6b83ab805bddb53710109690a2237e98bf83c0b3a00033c517cdf5f6a8fa470d"
             ],
             "index": "pypi",
-            "version": "==2022.1.1"
+            "version": "==2022.1.2"
         },
         "py": {
             "hashes": [
