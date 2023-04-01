@@ -56,7 +56,7 @@ def thrown_away(
 
 @router.get("/{garment_id}", response_model=schemas.Garment)
 def get_garment(
-    garment_id: int = Path(None, title="The ID of the garment to get", ge=1),
+    garment_id: int = Path(title="The ID of the garment to get", ge=1),
     db: Session = Depends(get_db),
 ):
     return _get_garment(db, garment_id)
@@ -81,7 +81,7 @@ def get_journal(
 def post_journal_entry(
     new_entry: schemas.JournalEntryCreate,
     db: Session = Depends(get_db),
-    garment_id: int = Path(None, title="The ID for the garment", ge=1),
+    garment_id: int = Path(title="The ID for the garment", ge=1),
 ):
     garment = _get_garment(db, garment_id)
     return Journaling.create(garment.journaling_key, new_entry.message)
@@ -96,14 +96,14 @@ def create_garment(garment: schemas.GarmentCreate, db: Session = Depends(get_db)
 def update_garment(
     new_garment_data: schemas.GarmentUpdate,
     db: Session = Depends(get_db),
-    garment_id: int = Path(None, title="The ID for the garment to update", ge=1),
+    garment_id: int = Path(title="The ID for the garment to update", ge=1),
 ):
     return crud.update_garment(db, garment_id, new_garment_data)
 
 
 @router.delete("/{garment_id}")
 async def delete_garment(
-    garment_id: int = Path(None, title="The ID of the garment to remove", ge=1),
+    garment_id: int = Path(title="The ID of the garment to remove", ge=1),
     db: Session = Depends(get_db),
 ):
     crud.delete_garment(db, _get_garment(db, garment_id))
@@ -112,7 +112,7 @@ async def delete_garment(
 
 @router.post("/{garment_id}/wear")
 async def wear_garment(
-    garment_id: int = Path(None, title="The ID of the garment to wear", ge=1),
+    garment_id: int = Path(title="The ID of the garment to wear", ge=1),
     db: Session = Depends(get_db),
 ):
     return crud.wear(db, _get_garment(db, garment_id))
@@ -120,7 +120,7 @@ async def wear_garment(
 
 @router.post("/{garment_id}/wash")
 async def wash_garment(
-    garment_id: int = Path(None, title="The ID of the garment to wash", ge=1),
+    garment_id: int = Path(title="The ID of the garment to wash", ge=1),
     db: Session = Depends(get_db),
 ):
     return crud.wash(db, _get_garment(db, garment_id))
@@ -128,7 +128,7 @@ async def wash_garment(
 
 @router.post("/{garment_id}/throw_away")
 async def throw_away_garment(
-    garment_id: int = Path(None, title="The ID of the garment to throw away", ge=1),
+    garment_id: int = Path(title="The ID of the garment to throw away", ge=1),
     db: Session = Depends(get_db),
 ):
     return crud.throw_away(db, _get_garment(db, garment_id))

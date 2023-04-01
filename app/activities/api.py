@@ -30,7 +30,7 @@ def create_activity(activity: schemas.ActivityCreate, db: Session = Depends(get_
 
 @router.delete("/{activity_id}")
 async def delete_activity(
-    activity_id: int = Path(None, title="The ID of the activity to remove", ge=1),
+    activity_id: int = Path(title="The ID of the activity to remove", ge=1),
     db: Session = Depends(get_db),
 ):
     crud.delete_activity(db, _get_activity(db, activity_id))

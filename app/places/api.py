@@ -28,7 +28,7 @@ def create_place(place: schemas.PlaceCreate, db: Session = Depends(get_db)):
 
 @router.delete("/{place_id}")
 async def delete_place(
-    place_id: int = Path(None, title="The ID of the place to remove", ge=1),
+    place_id: int = Path(title="The ID of the place to remove", ge=1),
     db: Session = Depends(get_db),
 ):
     crud.delete_place(db, _get_place(db, place_id))
