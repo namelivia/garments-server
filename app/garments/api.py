@@ -65,9 +65,7 @@ def get_garment(
 @router.get("/{garment_id}/journal")
 def get_journal(
     db: Session = Depends(get_db),
-    garment_id: int = Path(
-        title="The ID of the garment to get the journal from", ge=1
-    ),
+    garment_id: int = Path(title="The ID of the garment to get the journal from", ge=1),
 ):
     garment = _get_garment(db, garment_id)
     return Journaling.get(garment.journaling_key)
