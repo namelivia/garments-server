@@ -66,7 +66,7 @@ def get_garment(
 def get_journal(
     db: Session = Depends(get_db),
     garment_id: int = Path(
-        None, title="The ID of the garment to get the journal from", ge=1
+        title="The ID of the garment to get the journal from", ge=1
     ),
 ):
     garment = _get_garment(db, garment_id)
