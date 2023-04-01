@@ -32,9 +32,7 @@ def create_garment_type(
 
 @router.delete("/{garment_type_id}")
 async def delete_garment_type(
-    garment_type_id: int = Path(
-        None, title="The ID of the garment_type to remove", ge=1
-    ),
+    garment_type_id: int = Path(title="The ID of the garment_type to remove", ge=1),
     db: Session = Depends(get_db),
 ):
     crud.delete_garment_type(db, _get_garment_type(db, garment_type_id))
