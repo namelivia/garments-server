@@ -26,11 +26,11 @@
         },
         "anyio": {
             "hashes": [
-                "sha256:cfdb2b588b9fc25ede96d8db56ed50848b0b649dca3dd1df0b11f683bb9e0b5f",
-                "sha256:f7ed51751b2c2add651e5747c891b47e26d2a21be5d32d9311dfe9692f3e5d7a"
+                "sha256:44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780",
+                "sha256:91dee416e570e92c64041bd18b900d1d6fa78dff7048769ce5ac5ddad004fbb5"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==4.0.0"
+            "markers": "python_version >= '3.7'",
+            "version": "==3.7.1"
         },
         "black": {
             "hashes": [
@@ -245,11 +245,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:4166732f5ddf61c33e9fa4664f73780872511e0598d4d5434b1816dc1e6d9421",
-                "sha256:61ab72c6c281205dd0cbaccf503e829a37e0be108d965ac223779a8479243665"
+                "sha256:345844e6a82062f06a096684196aaf96c1198b25c06b72c1311b882aa2d8a35d",
+                "sha256:5e5f17e826dbd9e9b5a5145976c5cd90bcaa61f2bf9a69aca423f2bcebe44d83"
             ],
             "index": "pypi",
-            "version": "==0.103.0"
+            "version": "==0.103.1"
         },
         "fastapi-utils": {
             "hashes": [
@@ -409,7 +409,7 @@
                 "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4",
                 "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==3.4"
         },
         "importlib-metadata": {
@@ -523,7 +523,7 @@
                 "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d",
                 "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==1.0.0"
         },
         "packaging": {
@@ -628,7 +628,7 @@
         "pyjwt": {
             "editable": true,
             "git": "https://github.com/jpadilla/pyjwt.git",
-            "ref": "332774fa79e61b286eca9bf5473ae18b1d78a858"
+            "ref": "5f6bffffe8ff37c639d5fc5d2d8ad7a95e7e796e"
         },
         "pytest": {
             "hashes": [
@@ -947,6 +947,9 @@
             "version": "==2.1.13"
         },
         "coverage": {
+            "extras": [
+                "toml"
+            ],
             "hashes": [
                 "sha256:025ded371f1ca280c035d91b43252adbb04d2aea4c7105252d3cbc227f03b375",
                 "sha256:04312b036580ec505f2b77cbbdfb15137d5efdfade09156961f5277149f5e344",
@@ -1040,7 +1043,7 @@
                 "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4",
                 "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==3.4"
         },
         "iniconfig": {
@@ -1072,7 +1075,7 @@
                 "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d",
                 "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==1.0.0"
         },
         "nodeenv": {
@@ -1228,11 +1231,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:00478ca80aeebeecb2f288d3206b0de568df5cd2b8fada1209843cc9a8d88a48",
-                "sha256:af3d5949030c3f493f550876b2fd1dd5ec66689c4ee5d5344f009746f71fd5a8"
+                "sha256:56ee14884fd8d0cd015411f4a13f40b4356775a0aefd9ebc1d3bfb9a1acb32f1",
+                "sha256:eff96148eb336377ab11beee0c73ed84f1709a40c0b870298b0d058828761bae"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==68.2.0"
+            "version": "==68.2.1"
         },
         "tomli": {
             "hashes": [
