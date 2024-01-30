@@ -5,6 +5,7 @@ from app.places.api import router as places
 from app.activities.api import router as activities
 from app.images.api import router as images
 from app.users.api import router as users
+from app.outfits.api import router as outfits
 from app.garment_types.api import router as garment_types
 import logging
 import sys
@@ -25,12 +26,5 @@ app.add_middleware(
 
 [
     app.include_router(router)
-    for router in [
-        garments,
-        places,
-        activities,
-        images,
-        users,
-        garment_types,
-    ]
+    for router in [garments, places, activities, images, users, garment_types, outfits]
 ]

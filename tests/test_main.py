@@ -632,3 +632,65 @@ class TestApp:
             "washing": False,
             "thrown_away": True,
         }
+
+    def test_get_outfit_by_place_type_and_activity(self, client, database_test_session):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "socks",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "underpants",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "pants",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "tshirt",
+                "journaling_key": key,
+            },
+        )
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "shoe",
+                "journaling_key": key,
+            },
+        )
+        response = client.get("/outfit?place=home&activity=everyday")
+        assert response.status_code == 200
+        assert response.json() == {
+            "pants": "Test garment",
+            "shoe": "Test garment",
+            "socks": "Test garment",
+            "tshirt": "Test garment",
+            "underpants": "Test garment",
+        }
+
+    def test_when_there_are_no_availabe_garments_for_outfit_400_is_returned(
+        self, client, database_test_session
+    ):
+        key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "garment_type": "shoe",
+                "journaling_key": key,
+            },
+        )
+        response = client.get("/outfit?place=home&activity=everyday")
+        assert response.status_code == 400
+        assert response.json() == {"detail": "No garment of type socks found"}
