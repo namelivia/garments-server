@@ -5,6 +5,7 @@ Revises:
 Create Date: 2021-01-16 15:54:48.129958
 
 """
+
 from alembic import op
 import sqlalchemy as sa
 from fastapi_utils.guid_type import GUID
