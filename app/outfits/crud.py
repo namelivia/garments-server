@@ -28,7 +28,7 @@ def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
     )
     outfit = {}
     for garment_type in types:
-        outfit[garment_type] = _filter_garment_for_type(query, garment_type).name
+        outfit[garment_type] = _filter_garment_for_type(query, garment_type)
     return outfit
 
 
