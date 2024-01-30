@@ -670,14 +670,18 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday")
+        response = client.get(
+            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
+        )
         assert response.status_code == 200
         assert response.json() == {
-            "pants": "Test garment",
-            "shoe": "Test garment",
-            "socks": "Test garment",
-            "tshirt": "Test garment",
-            "underpants": "Test garment",
+            "garments": {
+                "pants": "Test garment",
+                "shoe": "Test garment",
+                "socks": "Test garment",
+                "tshirt": "Test garment",
+                "underpants": "Test garment",
+            }
         }
 
     def test_when_there_are_no_availabe_garments_for_outfit_400_is_returned(
@@ -691,6 +695,8 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday")
+        response = client.get(
+            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
+        )
         assert response.status_code == 400
         assert response.json() == {"detail": "No garment of type socks found"}

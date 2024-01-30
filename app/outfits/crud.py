@@ -4,6 +4,7 @@ import logging
 from . import schemas
 from app.garments.models import Garment
 import random
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -18,18 +19,21 @@ def _filter_garment_for_type(garments, garment_type):
     ).first()
 
 
-def get_outfit_for_place_and_activity(db: Session, place: str, activity):
+def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
     query = db.query(Garment).filter(
         Garment.washing == False,
         Garment.thrown_away == False,
         Garment.place == place,
         Garment.activity == activity,
     )
-    socks = _filter_garment_for_type(query, "socks").name
-    underpants = _filter_garment_for_type(query, "underpants").name
-    pants = _filter_garment_for_type(query, "pants").name
-    tshirt = _filter_garment_for_type(query, "tshirt").name
-    shoe = _filter_garment_for_type(query, "shoe").name
-    return schemas.Outfit(
-        socks=socks, underpants=underpants, pants=pants, tshirt=tshirt, shoe=shoe
-    )
+    outfit = {}
+    for garment_type in types:
+        outfit[garment_type] = _filter_garment_for_type(query, garment_type).name
+    return outfit
+
+
+def get_outfit_for_place_and_activity(
+    db: Session, place: str, activity, types: List[str]
+):
+    outfit = _generate_outfit(db, place, activity, types)
+    return schemas.Outfit(garments=outfit)
