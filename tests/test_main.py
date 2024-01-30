@@ -670,14 +670,93 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday")
+        response = client.get(
+            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
+        )
         assert response.status_code == 200
         assert response.json() == {
-            "pants": "Test garment",
-            "shoe": "Test garment",
-            "socks": "Test garment",
-            "tshirt": "Test garment",
-            "underpants": "Test garment",
+            "garments": {
+                "pants": {
+                    "activity": "everyday",
+                    "color": "red",
+                    "garment_type": "pants",
+                    "id": 3,
+                    "image": None,
+                    "journaling_key": str(key),
+                    "name": "Test garment",
+                    "place": "home",
+                    "status": "ok",
+                    "thrown_away": False,
+                    "total_worn": 0,
+                    "washing": False,
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                },
+                "shoe": {
+                    "activity": "everyday",
+                    "color": "red",
+                    "garment_type": "shoe",
+                    "id": 5,
+                    "image": None,
+                    "journaling_key": str(key),
+                    "name": "Test garment",
+                    "place": "home",
+                    "status": "ok",
+                    "thrown_away": False,
+                    "total_worn": 0,
+                    "washing": False,
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                },
+                "socks": {
+                    "activity": "everyday",
+                    "color": "red",
+                    "garment_type": "socks",
+                    "id": 1,
+                    "image": None,
+                    "journaling_key": str(key),
+                    "name": "Test garment",
+                    "place": "home",
+                    "status": "ok",
+                    "thrown_away": False,
+                    "total_worn": 0,
+                    "washing": False,
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                },
+                "tshirt": {
+                    "activity": "everyday",
+                    "color": "red",
+                    "garment_type": "tshirt",
+                    "id": 4,
+                    "image": None,
+                    "journaling_key": str(key),
+                    "name": "Test garment",
+                    "place": "home",
+                    "status": "ok",
+                    "thrown_away": False,
+                    "total_worn": 0,
+                    "washing": False,
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                },
+                "underpants": {
+                    "activity": "everyday",
+                    "color": "red",
+                    "garment_type": "underpants",
+                    "id": 2,
+                    "image": None,
+                    "journaling_key": str(key),
+                    "name": "Test garment",
+                    "place": "home",
+                    "status": "ok",
+                    "thrown_away": False,
+                    "total_worn": 0,
+                    "washing": False,
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                },
+            }
         }
 
     def test_when_there_are_no_availabe_garments_for_outfit_400_is_returned(
@@ -691,6 +770,8 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday")
+        response = client.get(
+            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
+        )
         assert response.status_code == 400
         assert response.json() == {"detail": "No garment of type socks found"}

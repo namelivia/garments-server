@@ -9,8 +9,9 @@ router = APIRouter(prefix="/outfit", dependencies=[Depends(get_db)])
 
 
 @router.get("", response_model=schemas.Outfit)
-def outfit(place: str, activity: str, db: Session = Depends(get_db)):
+def outfit(place: str, activity: str, types: str, db: Session = Depends(get_db)):
+    types = types.split(",")
     try:
-        return crud.get_outfit_for_place_and_activity(db, place, activity)
+        return crud.get_outfit_for_place_and_activity(db, place, activity, types)
     except Exception as e:
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=str(e))
