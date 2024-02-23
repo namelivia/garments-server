@@ -107,6 +107,21 @@ def delete_garment(db: Session, garment: models.Garment):
     logger.info("Garment deleted")
 
 
+def send_to_wash(db: Session, garment: models.Garment):
+    garment.washing = True
+    db.commit()
+    db.refresh(garment)
+    logger.info("Sending garment {garment.name} to wash")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"Garment {garment.name} sent to wash",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment
+
+
 def wear(db: Session, garment: models.Garment):
     garment.worn += 1
     garment.total_worn += 1

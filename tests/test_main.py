@@ -571,8 +571,40 @@ class TestApp:
             "thrown_away": False,
         }
 
-    def test_wash_garment(self, client, database_test_session):
+    def test_sending_garment_to_wash_garment(self, client, database_test_session):
         key = uuid.uuid4()
+        self._insert_test_garment(
+            database_test_session,
+            {
+                "worn": 2,
+                "total_worn": 2,
+                "journaling_key": key,
+                "worn": 0,
+                "wear_to_wash": 9,
+                "washing": False,
+                "thrown_away": False,
+            },
+        )
+        response = client.post("/garments/1/send_to_wash")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test garment",
+            "garment_type": "Shoe",
+            "image": None,
+            "color": "red",
+            "place": "home",
+            "activity": "everyday",
+            "status": "ok",
+            "journaling_key": str(key),
+            "wear_to_wash": 9,
+            "worn": 0,
+            "total_worn": 2,
+            "washing": True,
+            "thrown_away": False,
+        }
+
+    def test_wash_garment(self, client, database_test_session):
         key = uuid.uuid4()
         self._insert_test_garment(
             database_test_session,
