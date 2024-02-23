@@ -34,6 +34,14 @@ def get_garments_for_place(db: Session, place: str):
     return db.query(models.Garment).filter(models.Garment.place == place).all()
 
 
+def count_not_thrown_garments_for_place(db: Session, place: str):
+    return (
+        db.query(models.Garment)
+        .filter(models.Garment.place == place, models.Garment.thrown_away == False)
+        .count()
+    )
+
+
 # TODO: skip and limit
 def get_garments(
     db: Session, place: str = None, garment_type: str = None, activity: str = None

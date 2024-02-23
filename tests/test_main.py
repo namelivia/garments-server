@@ -295,18 +295,20 @@ class TestApp:
 
     def test_get_all_places(self, client, database_test_session):
         self._insert_test_place(database_test_session, {"name": "test place 1"})
+        # These two will be filtered out
         self._insert_test_place(database_test_session, {"name": "test place 2"})
+        self._insert_test_place(database_test_session, {"name": "test place 3"})
+        self._insert_test_garment(database_test_session, {"place": "test place 1"})
+        self._insert_test_garment(
+            database_test_session, {"place": "test place 2", "thrown_away": True}
+        )
         response = client.get("/places")
         assert response.status_code == 200
         assert response.json() == [
             {
                 "id": 1,
                 "name": "test place 1",
-            },
-            {
-                "id": 2,
-                "name": "test place 2",
-            },
+            }
         ]
 
     def test_get_all_activities(self, client, database_test_session):
