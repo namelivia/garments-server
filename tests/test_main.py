@@ -298,8 +298,8 @@ class TestApp:
         # These two will be filtered out
         self._insert_test_place(database_test_session, {"name": "test place 2"})
         self._insert_test_place(database_test_session, {"name": "test place 3"})
-        self._insert_test_garment({"place": "test place 1"})
-        self._insert_test_garment({"place": "test place 2", "thrown_away"=True})
+        self._insert_test_garment(database_test_session, {"place": "test place 1"})
+        self._insert_test_garment(database_test_session, {"place": "test place 2", "thrown_away": True})
         response = client.get("/places")
         assert response.status_code == 200
         assert response.json() == [

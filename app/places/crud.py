@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import logging
 from . import models, schemas
-from garments.crud import count_not_thrown_garments_for_place
+from app.garments.crud import count_not_thrown_garments_for_place
 
 logger = logging.getLogger(__name__)
 
