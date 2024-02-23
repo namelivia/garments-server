@@ -33,8 +33,8 @@ def get_random_garment(
 def get_garments_for_place(db: Session, place: str):
     return db.query(models.Garment).filter(models.Garment.place == place).all()
 
-def count_garments_for_place(db: Session, place: str):
-    return db.query(models.Garment).filter(models.Garment.place == place).count()
+def count_not_thrown_garments_for_place(db: Session, place: str):
+    return db.query(models.Garment).filter(models.Garment.place == place, models.Garment.thrown_away == False).count()
 
 
 # TODO: skip and limit

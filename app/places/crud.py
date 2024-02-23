@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import logging
 from . import models, schemas
-from garments.crud import count_garments_for_place
+from garments.crud import count_not_thrown_garments_for_place
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ def get_places(db: Session):
     result = []
     # Filter out places that have no garments
     for place in places:
-        place.garments = count_garments_for_place(db, place.name)
+        place.garments = count_not_thrown_garments_for_place(db, place.name)
         if place.garments > 0:
             result.append(place)
     return result
