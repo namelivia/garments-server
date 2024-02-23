@@ -124,6 +124,14 @@ async def wash_garment(
     return crud.wash(db, _get_garment(db, garment_id))
 
 
+@router.post("/{garment_id}/send_to_wash")
+async def send_to_wash_garment(
+    garment_id: int = Path(title="The ID of the garment to send to wash", ge=1),
+    db: Session = Depends(get_db),
+):
+    return crud.send_to_wash(db, _get_garment(db, garment_id))
+
+
 @router.post("/{garment_id}/throw_away")
 async def throw_away_garment(
     garment_id: int = Path(title="The ID of the garment to throw away", ge=1),
