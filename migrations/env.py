@@ -10,6 +10,7 @@ from app.database import Base
 from app.garments.models import *
 from app.places.models import *
 from app.activities.models import *
+from app.outfits.models import *
 from app.garment_types.models import *
 from app.users.models import *
 

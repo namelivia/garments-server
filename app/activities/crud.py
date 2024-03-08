@@ -24,7 +24,7 @@ def create_activity(db: Session, activity: schemas.ActivityCreate):
     return db_activity
 
 
-def delete_activity(db: Session, garment: models.Activity):
-    db.delete(garment)
+def delete_activity(db: Session, activity: models.Activity):
+    db.delete(activity)
     db.commit()
     logger.info("Activity deleted")
