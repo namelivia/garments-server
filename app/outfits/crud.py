@@ -18,12 +18,6 @@ def _filter_garment_for_type(garments, garment_type):
     ).first()
 
 
-def _save_outfit(db: Session):
-    db_outfit = models.Outfit()
-    db.add(db_outfit)
-    db.commit()
-
-
 def _generate_outfit(db: Session, place: str, activity: str, temperature: int):
     query = db.query(Garment).filter(
         Garment.washing == False,
@@ -31,16 +25,20 @@ def _generate_outfit(db: Session, place: str, activity: str, temperature: int):
         Garment.place == place,
         Garment.activity == activity,
     )
-    outfit = {}
     types = ["socks", "underpants", "pants", "tshirt", "shoe"]
+    garments = []
     for garment_type in types:
-        outfit[garment_type] = _filter_garment_for_type(query, garment_type)
-    # _save_outfit(db)
-    return outfit
+        garments.append(_filter_garment_for_type(query, garment_type))
+
+    db_outfit = models.Outfit(garments=garments)
+    db.add(db_outfit)
+    db.commit()
+    db.refresh(db_outfit)
+    return db_outfit
 
 
 def get_outfit_for_place_and_activity(
     db: Session, place: str, activity, types: List[str]
 ):
     outfit = _generate_outfit(db, place, activity, types)
-    return schemas.Outfit(garments=outfit)
+    return schemas.Outfit(id=outfit.id, garments=outfit.garments)

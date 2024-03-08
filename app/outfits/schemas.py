@@ -1,9 +1,8 @@
-from typing import Optional
+from typing import List
 from pydantic import BaseModel, Field
+from app.garments.schemas import Garment
 
 
 class Outfit(BaseModel):
-    garments: dict = Field(
-        ...,
-        description="A dictionary with the garment type as key and the name of the garment as value",
-    )
+    id: int
+    garments: List[Garment] = Field(title="Garments for the outfit")
