@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 import logging
 from . import models, schemas
 from app.garments.models import Garment
+from app.garments.crud import wear
 import random
 from typing import List
 
@@ -37,8 +38,18 @@ def _generate_outfit(db: Session, place: str, activity: str, temperature: int):
     return db_outfit
 
 
+def wear_outfit(db: Session, outfit: models.Outfit):
+    [wear(db, garment) for garment in outfit.garments]
+    db.refresh(outfit)
+    return schemas.Outfit(id=outfit.id, garments=outfit.garments)
+
+
 def get_outfit_for_place_and_activity(
     db: Session, place: str, activity, types: List[str]
 ):
     outfit = _generate_outfit(db, place, activity, types)
     return schemas.Outfit(id=outfit.id, garments=outfit.garments)
+
+
+def get_outfit(db: Session, outfit_id: int):
+    return db.query(models.Outfit).filter(models.Outfit.id == outfit_id).first()

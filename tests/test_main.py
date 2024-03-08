@@ -8,6 +8,7 @@ from .test_base import (
     database_test_session,
 )
 from app.garments.models import Garment
+from app.outfits.models import Outfit
 from app.places.models import Place
 from app.activities.models import Activity
 from app.garment_types.models import GarmentType
@@ -37,6 +38,15 @@ class TestApp:
         session.add(db_garment)
         session.commit()
         return db_garment
+
+    def _insert_test_outfit(self, session, outfit: dict = {}):
+        key = uuid.uuid4()
+        data = {}
+        data.update(outfit)
+        db_outfit = Outfit(**data)
+        session.add(db_outfit)
+        session.commit()
+        return db_outfit
 
     def _insert_test_place(self, session, place: dict = {}):
         data = {
@@ -705,95 +715,7 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday&temperature=10")
-        assert response.status_code == 200
-        assert response.json() == {
-            "id": 1,
-            "garments": [
-                {
-                    "id": 1,
-                    "name": "Test garment",
-                    "garment_type": "socks",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                },
-                {
-                    "id": 2,
-                    "name": "Test garment",
-                    "garment_type": "underpants",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                },
-                {
-                    "id": 3,
-                    "name": "Test garment",
-                    "garment_type": "pants",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                },
-                {
-                    "id": 4,
-                    "name": "Test garment",
-                    "garment_type": "tshirt",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                },
-                {
-                    "id": 5,
-                    "name": "Test garment",
-                    "garment_type": "shoe",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                },
-            ],
-        }
-
-        response = client.get("/outfit/last")
+        response = client.get("/outfits?place=home&activity=everyday&temperature=10")
         assert response.status_code == 200
         assert response.json() == {
             "id": 1,
@@ -892,6 +814,14 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get("/outfit?place=home&activity=everyday&temperature=10")
+        response = client.get("/outfits?place=home&activity=everyday&temperature=10")
         assert response.status_code == 400
         assert response.json() == {"detail": "No garment of type socks found"}
+
+    def test_wear_outfit(self, client, database_test_session):
+        key = uuid.uuid4()
+        garments = [self._insert_test_garment(database_test_session)]
+        outfit = self._insert_test_outfit(database_test_session, {"garments": garments})
+        response = client.post("/outfits/1/wear")
+        assert response.status_code == 200
+        assert response.json()["garments"][0]["worn"] == 1
