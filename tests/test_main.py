@@ -704,9 +704,7 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get(
-            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
-        )
+        response = client.get("/outfit?place=home&activity=everyday&temperature=10")
         assert response.status_code == 200
         assert response.json() == {
             "garments": {
@@ -804,8 +802,6 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        response = client.get(
-            "/outfit?place=home&activity=everyday&types=socks,underpants,pants,tshirt,shoe"
-        )
+        response = client.get("/outfit?place=home&activity=everyday&temperature=10")
         assert response.status_code == 400
         assert response.json() == {"detail": "No garment of type socks found"}
