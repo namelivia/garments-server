@@ -19,7 +19,7 @@ def _filter_garment_for_type(garments, garment_type):
     ).first()
 
 
-def _generate_outfit(db: Session, place: str, activity: str, temperature: int):
+def _generate_outfit(db: Session, place: str, activity: str):
     query = db.query(Garment).filter(
         Garment.washing == False,
         Garment.thrown_away == False,
