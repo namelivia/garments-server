@@ -18,6 +18,7 @@ async def get_current_user(
     x_pomerium_jwt_assertion: Optional[str] = Header(None),
 ):
     try:
+        return {"place": "Test place"}
         user_info = UserInfo.get_current(x_pomerium_jwt_assertion)
         user_data = crud.get_or_create_user_data(db, user_info["sub"])
         return {
