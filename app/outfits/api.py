@@ -28,6 +28,4 @@ async def wear_outfit(
     outfit_id: int = Path(title="The ID of the outfit to wear", ge=1),
     db: Session = Depends(get_db),
 ):
-    from pudb.remote import set_trace
-
     return crud.wear_outfit(db, _get_outfit(db, outfit_id))
