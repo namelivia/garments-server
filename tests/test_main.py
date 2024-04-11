@@ -719,6 +719,7 @@ class TestApp:
         assert response.status_code == 200
         assert response.json() == {
             "id": 1,
+            "worn_on": None,
             "garments": [
                 {
                     "id": 1,
@@ -825,3 +826,4 @@ class TestApp:
         response = client.post("/outfits/1/wear")
         assert response.status_code == 200
         assert response.json()["garments"][0]["worn"] == 1
+        assert response.json()["worn_on"] == "2013-04-09T00:00:00"

@@ -5,6 +5,7 @@ from . import models, schemas
 from app.garments.models import Garment
 from app.garments.crud import wear
 import random
+from datetime import date
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -38,9 +39,13 @@ def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
 
 
 def wear_outfit(db: Session, outfit: models.Outfit):
+    today = date.today()
+    outfit.worn_on = today
     [wear(db, garment) for garment in outfit.garments]
     db.refresh(outfit)
-    return schemas.Outfit(id=outfit.id, garments=outfit.garments)
+    return schemas.Outfit(
+        id=outfit.id, garments=outfit.garments, worn_on=outfit.worn_on
+    )
 
 
 def get_outfit_for_place_and_activity(db: Session, place: str, activity):

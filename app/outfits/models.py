@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime
 
 from sqlalchemy.orm import relationship
 from app.database import Base
@@ -16,3 +16,4 @@ class Outfit(Base):
     __tablename__ = "outfits"
     id = Column(Integer, primary_key=True, index=True)
     garments = relationship(Garment, secondary=outfit_garment)
+    worn_on = Column(DateTime)
