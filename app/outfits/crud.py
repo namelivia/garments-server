@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 import logging
 from . import models, schemas
 from app.garments.models import Garment
+from app.weather.weather import get_weather_for_place
 from app.garments.crud import wear
 import random
 from datetime import date
@@ -20,7 +21,9 @@ def _filter_garment_for_type(garments, garment_type):
     ).first()
 
 
-def _get_garment_types_for_activity(activity: str) -> List[str]:
+def _get_garment_types_for_activity_and_weather(
+    activity: str, weather: str
+) -> List[str]:
     return ["socks", "underpants", "pants", "tshirt", "shoe"]
 
 
@@ -32,7 +35,10 @@ def _generate_outfit(db: Session, place: str, activity: str):
         Garment.activity == activity,
     )
     garments = []
-    types = _get_garment_types_for_activity(activity)
+    weather = get_weather_for_place(place)
+    types = _get_garment_types_for_activity_and_weather(
+        activity, get_weather_for_place(place)
+    )
     for garment_type in types:
         garments.append(_filter_garment_for_type(query, garment_type))
 
