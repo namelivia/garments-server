@@ -4,6 +4,8 @@ from app.dependencies import get_db
 from . import crud, schemas
 from sqlalchemy.orm import Session
 from app.journaling.journaling import Journaling
+from datetime import date
+from typing import List
 
 router = APIRouter(prefix="/outfits", dependencies=[Depends(get_db)])
 
@@ -29,3 +31,10 @@ async def wear_outfit(
     db: Session = Depends(get_db),
 ):
     return crud.wear_outfit(db, _get_outfit(db, outfit_id))
+
+
+@router.get("/today", response_model=List[schemas.Outfit])
+async def get_todays_outfits(
+    db: Session = Depends(get_db),
+):
+    return crud.get_outfits_for_date(db, date.today())

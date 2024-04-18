@@ -48,6 +48,13 @@ def wear_outfit(db: Session, outfit: models.Outfit):
     )
 
 
+def get_outfits_for_date(db: Session, date: date):
+    outfits = db.query(models.Outfit).filter(models.Outfit.worn_on == date)
+    return [
+        schemas.Outfit(id=outfit.id, garments=outfit.garments) for outfit in outfits
+    ]
+
+
 def get_outfit_for_place_and_activity(db: Session, place: str, activity):
     types = ["socks", "underpants", "pants", "tshirt", "shoe"]
     outfit = _generate_outfit(db, place, activity, types)
