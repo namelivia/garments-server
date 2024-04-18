@@ -12,6 +12,7 @@ from app.outfits.models import Outfit
 from app.places.models import Place
 from app.activities.models import Activity
 from app.garment_types.models import GarmentType
+from datetime import date
 from freezegun import freeze_time
 
 
@@ -827,3 +828,20 @@ class TestApp:
         assert response.status_code == 200
         assert response.json()["garments"][0]["worn"] == 1
         assert response.json()["worn_on"] == "2013-04-09T00:00:00"
+
+    def test_getting_todays_outfits(self, client, database_test_session):
+        key = uuid.uuid4()
+        garments = [self._insert_test_garment(database_test_session)]
+        today = date.today()
+        outfit = self._insert_test_outfit(
+            database_test_session, {"garments": [], "worn_on": today}
+        )
+        another_outfit = self._insert_test_outfit(
+            database_test_session, {"garments": [], "worn_on": today}
+        )
+        response = client.get("/outfits/today")
+        assert response.status_code == 200
+        assert response.json() == [
+            {"id": 1, "worn_on": "2013-04-09T00:00:00", "garments": []},
+            {"id": 2, "worn_on": "2013-04-09T00:00:00", "garments": []},
+        ]
