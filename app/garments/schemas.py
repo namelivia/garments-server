@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
 from pydantic import BaseModel, Field
+from app.activities.schemas import Activity
 import datetime
 
 
@@ -30,6 +31,7 @@ class Garment(GarmentBase):
     washing: bool = Field(title="If the garment is pending to be washed")
     thrown_away: bool = Field(title="If the garment has been thrown away")
     journaling_key: UUID = Field(title="Parent key for the journal entry")
+    activities: List[Activity] = Field(title="Activities for the outfit")
 
     class Config:
         orm_mode = True

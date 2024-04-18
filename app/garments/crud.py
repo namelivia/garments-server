@@ -4,6 +4,7 @@ import logging
 import uuid
 from . import models, schemas
 from app.journaling.journaling import Journaling
+from app.activities.models import Activity
 import random
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ def get_random_garment(
     if garment_type is not None:
         query = query.filter(models.Garment.garment_type == garment_type)
     if activity is not None:
-        query = query.filter(models.Garment.activity == activity)
+        query = query.filter(models.Garment.activities.any(Activity.name == activity))
     row_count = int(query.count())
     return query.offset(int(row_count * random.random())).first()
 
@@ -50,7 +51,7 @@ def get_garments(
     if place is not None:
         query = query.filter(models.Garment.place == place)
     if activity is not None:
-        query = query.filter(models.Garment.activity == activity)
+        query = query.filter(models.Garment.activities.any(Activity.name == activity))
     if garment_type is not None:
         query = query.filter(models.Garment.garment_type == garment_type)
     return query.all()

@@ -1,6 +1,16 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Table, ForeignKey
+from sqlalchemy.orm import relationship
 from fastapi_utils.guid_type import GUID
 from app.database import Base
+
+from app.activities.models import Activity
+
+garment_activity = Table(
+    "garment_activity",
+    Base.metadata,
+    Column("garment_id", ForeignKey("garments.id")),
+    Column("activity_id", ForeignKey("activities.id")),
+)
 
 
 class Garment(Base):
@@ -18,4 +28,5 @@ class Garment(Base):
     wear_to_wash = Column(Integer, nullable=False)
     washing = Column(Boolean, nullable=False)
     thrown_away = Column(Boolean, nullable=False)
+    activities = relationship(Activity, secondary=garment_activity)
     image = Column(String)

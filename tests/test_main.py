@@ -36,6 +36,9 @@ class TestApp:
         }
         data.update(garment)
         db_garment = Garment(**data)
+        activities = garment["activities"] if "activities" in garment else []
+        for activity in activities:
+            db_garment.activities.append(activity)
         session.add(db_garment)
         session.commit()
         return db_garment
@@ -113,6 +116,7 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_get_non_existing_garment(self, client):
@@ -166,6 +170,7 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_create_garment_invalid(self, client):
@@ -198,6 +203,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             },
             {
                 "id": 2,
@@ -214,6 +220,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             },
         ]
 
@@ -241,6 +248,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": True,
                 "thrown_away": False,
+                "activities": [],
             },
         ]
 
@@ -268,6 +276,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": True,
+                "activities": [],
             },
         ]
 
@@ -397,6 +406,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             }
         ]
 
@@ -404,6 +414,12 @@ class TestApp:
         self, client, database_test_session
     ):
         key = uuid.uuid4()
+        running_activity = self._insert_test_activity(
+            database_test_session, {"name": "running"}
+        )
+        everyday_activity = self._insert_test_activity(
+            database_test_session, {"name": "everyday"}
+        )
         self._insert_test_garment(
             database_test_session,
             {
@@ -411,6 +427,7 @@ class TestApp:
                 "activity": "everyday",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         self._insert_test_garment(
@@ -420,6 +437,7 @@ class TestApp:
                 "activity": "running",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
+                "activities": [running_activity],
             },
         )
         response = client.get(
@@ -442,6 +460,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [{"id": 1, "name": "running"}],
             }
         ]
 
@@ -479,17 +498,25 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_get_random_garment(self, client, database_test_session):
         key = uuid.uuid4()
-        self._insert_test_garment(
+        running_activity = self._insert_test_activity(
+            database_test_session, {"name": "running"}
+        )
+        everyday_activity = self._insert_test_activity(
+            database_test_session, {"name": "everyday"}
+        )
+        test_garment = self._insert_test_garment(
             database_test_session,
             {
                 "place": "place1",
                 "garment_type": "garment_type_1",
                 "activity": "running",
                 "journaling_key": key,
+                "activities": [running_activity],
             },
         )
         self._insert_test_garment(
@@ -499,6 +526,7 @@ class TestApp:
                 "activity": "running",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
+                "activities": [running_activity],
             },
         )
         self._insert_test_garment(
@@ -508,6 +536,7 @@ class TestApp:
                 "activity": "everyday",
                 "garment_type": "garment_type_1",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         # Washing garments will be excluded
