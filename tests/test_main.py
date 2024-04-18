@@ -113,6 +113,7 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_get_non_existing_garment(self, client):
@@ -166,6 +167,7 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_create_garment_invalid(self, client):
@@ -198,6 +200,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             },
             {
                 "id": 2,
@@ -214,6 +217,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             },
         ]
 
@@ -241,6 +245,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": True,
                 "thrown_away": False,
+                "activities": [],
             },
         ]
 
@@ -268,6 +273,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": True,
+                "activities": [],
             },
         ]
 
@@ -397,6 +403,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             }
         ]
 
@@ -442,6 +449,7 @@ class TestApp:
                 "total_worn": 0,
                 "washing": False,
                 "thrown_away": False,
+                "activities": [],
             }
         ]
 
@@ -479,6 +487,7 @@ class TestApp:
             "total_worn": 0,
             "washing": False,
             "thrown_away": False,
+            "activities": [],
         }
 
     def test_get_random_garment(self, client, database_test_session):
