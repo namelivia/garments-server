@@ -31,7 +31,7 @@ def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
     for garment_type in types:
         garments.append(_filter_garment_for_type(query, garment_type))
 
-    db_outfit = models.Outfit(garments=garments)
+    db_outfit = models.Outfit(garments=garments, activity=activity)
     db.add(db_outfit)
     db.commit()
     db.refresh(db_outfit)
@@ -44,14 +44,22 @@ def wear_outfit(db: Session, outfit: models.Outfit):
     [wear(db, garment) for garment in outfit.garments]
     db.refresh(outfit)
     return schemas.Outfit(
-        id=outfit.id, garments=outfit.garments, worn_on=outfit.worn_on
+        id=outfit.id,
+        activity=outfit.activity,
+        garments=outfit.garments,
+        worn_on=outfit.worn_on,
     )
 
 
 def get_outfits_for_date(db: Session, date: date):
     outfits = db.query(models.Outfit).filter(models.Outfit.worn_on == date)
     return [
-        schemas.Outfit(id=outfit.id, garments=outfit.garments, worn_on=outfit.worn_on)
+        schemas.Outfit(
+            id=outfit.id,
+            activity=outfit.activity,
+            garments=outfit.garments,
+            worn_on=outfit.worn_on,
+        )
         for outfit in outfits
     ]
 
@@ -60,7 +68,10 @@ def get_outfit_for_place_and_activity(db: Session, place: str, activity):
     types = ["socks", "underpants", "pants", "tshirt", "shoe"]
     outfit = _generate_outfit(db, place, activity, types)
     return schemas.Outfit(
-        id=outfit.id, garments=outfit.garments, worn_on=outfit.worn_on
+        id=outfit.id,
+        activity=outfit.activity,
+        garments=outfit.garments,
+        worn_on=outfit.worn_on,
     )
 
 

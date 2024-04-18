@@ -42,7 +42,9 @@ class TestApp:
 
     def _insert_test_outfit(self, session, outfit: dict = {}):
         key = uuid.uuid4()
-        data = {}
+        data = {
+            "activity": "everyday",
+        }
         data.update(outfit)
         db_outfit = Outfit(**data)
         session.add(db_outfit)
@@ -721,6 +723,7 @@ class TestApp:
         assert response.json() == {
             "id": 1,
             "worn_on": None,
+            "activity": "everyday",
             "garments": [
                 {
                     "id": 1,
@@ -842,6 +845,16 @@ class TestApp:
         response = client.get("/outfits/today")
         assert response.status_code == 200
         assert response.json() == [
-            {"id": 1, "worn_on": "2013-04-09T00:00:00", "garments": []},
-            {"id": 2, "worn_on": "2013-04-09T00:00:00", "garments": []},
+            {
+                "id": 1,
+                "worn_on": "2013-04-09T00:00:00",
+                "garments": [],
+                "activity": "everyday",
+            },
+            {
+                "id": 2,
+                "worn_on": "2013-04-09T00:00:00",
+                "garments": [],
+                "activity": "everyday",
+            },
         ]

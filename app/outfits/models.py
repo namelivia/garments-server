@@ -15,5 +15,6 @@ outfit_garment = Table(
 class Outfit(Base):
     __tablename__ = "outfits"
     id = Column(Integer, primary_key=True, index=True)
+    activity = Column(String, nullable=False)
     garments = relationship(Garment, secondary=outfit_garment)
     worn_on = Column(DateTime)
