@@ -712,11 +712,15 @@ class TestApp:
 
     def test_get_outfit_by_place_type_and_activity(self, client, database_test_session):
         key = uuid.uuid4()
+        everyday_activity = self._insert_test_activity(
+            database_test_session, {"name": "everyday"}
+        )
         self._insert_test_garment(
             database_test_session,
             {
                 "garment_type": "socks",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         self._insert_test_garment(
@@ -724,6 +728,7 @@ class TestApp:
             {
                 "garment_type": "underpants",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         self._insert_test_garment(
@@ -731,6 +736,7 @@ class TestApp:
             {
                 "garment_type": "pants",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         self._insert_test_garment(
@@ -738,6 +744,7 @@ class TestApp:
             {
                 "garment_type": "tshirt",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         self._insert_test_garment(
@@ -745,6 +752,7 @@ class TestApp:
             {
                 "garment_type": "shoe",
                 "journaling_key": key,
+                "activities": [everyday_activity],
             },
         )
         response = client.get("/outfits/new?place=home&activity=everyday")
@@ -769,6 +777,7 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
+                    "activities": [{"id": 1, "name": "everyday"}],
                 },
                 {
                     "id": 2,
@@ -785,6 +794,7 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
+                    "activities": [{"id": 1, "name": "everyday"}],
                 },
                 {
                     "id": 3,
@@ -801,6 +811,7 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
+                    "activities": [{"id": 1, "name": "everyday"}],
                 },
                 {
                     "id": 4,
@@ -817,6 +828,7 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
+                    "activities": [{"id": 1, "name": "everyday"}],
                 },
                 {
                     "id": 5,
@@ -833,6 +845,7 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
+                    "activities": [{"id": 1, "name": "everyday"}],
                 },
             ],
         }
