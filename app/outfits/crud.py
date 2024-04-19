@@ -84,3 +84,28 @@ def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
 
 def get_outfit(db: Session, outfit_id: int):
     return db.query(models.Outfit).filter(models.Outfit.id == outfit_id).first()
+
+
+def reject_outfit_garment(db: Session, outfit: models.Outfit, garment_id: int):
+    garment = db.query(Garment).filter(Garment.id == garment_id).first()
+    if not garment:
+        raise NotFoundException(f"Garment {garment_id} not found")
+    outfit.garments.remove(garment)
+
+    new_garment_query = db.query(Garment).filter(
+        Garment.washing == False,
+        Garment.thrown_away == False,
+        Garment.place == garment.place,
+        Garment.activities.any(Activity.name == outfit.activity),
+        Garment.id != garment_id,
+    )
+    new_garment = _filter_garment_for_type(new_garment_query, garment.garment_type)
+    outfit.garments.append(new_garment)
+    db.commit()
+    db.refresh(outfit)
+    return schemas.Outfit(
+        id=outfit.id,
+        activity=outfit.activity,
+        garments=outfit.garments,
+        worn_on=outfit.worn_on,
+    )

@@ -903,3 +903,65 @@ class TestApp:
                 "activity": "everyday",
             },
         ]
+
+    def test_rejecting_garment_from_outfit(self, client, database_test_session):
+        key = uuid.uuid4()
+        everyday_activity = self._insert_test_activity(
+            database_test_session,
+            {
+                "name": "everyday",
+                "garment_types": [
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "Shoe"}
+                    ),
+                ],
+            },
+        )
+        garments = [
+            self._insert_test_garment(
+                database_test_session,
+                {
+                    "journaling_key": key,
+                    "activities": [everyday_activity],
+                },
+            ),
+            self._insert_test_garment(
+                database_test_session,
+                {
+                    "journaling_key": key,
+                    "name": "Another garment",
+                    "activities": [everyday_activity],
+                },
+            ),
+        ]
+        outfit = self._insert_test_outfit(
+            database_test_session, {"garments": garments, "activity": "everyday"}
+        )
+        response = client.post("/outfits/1/reject/1")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "worn_on": None,
+            "garments": [
+                {
+                    "id": 2,
+                    "name": "Another garment",
+                    "garment_type": "Shoe",
+                    "color": "red",
+                    "place": "home",
+                    "activity": "everyday",
+                    "status": "ok",
+                    "image": None,
+                    "journaling_key": str(key),
+                    "wear_to_wash": 1,
+                    "worn": 0,
+                    "total_worn": 0,
+                    "washing": False,
+                    "thrown_away": False,
+                    "activities": [
+                        {"id": 1, "name": "everyday"},
+                    ],
+                }
+            ],
+            "activity": "everyday",
+        }

@@ -39,3 +39,12 @@ async def get_todays_outfits(
     db: Session = Depends(get_db),
 ):
     return crud.get_outfits_for_date(db, date.today())
+
+
+@router.post("/{outfit_id}/reject/{garment_id}", response_model=schemas.Outfit)
+async def reject_outfit_garment(
+    outfit_id: int = Path(title="The ID of the outfit", ge=1),
+    garment_id: int = Path(title="The ID of the garment to reject", ge=1),
+    db: Session = Depends(get_db),
+):
+    return crud.reject_outfit_garment(db, _get_outfit(db, outfit_id), garment_id)
