@@ -4,6 +4,8 @@ import logging
 from . import models, schemas
 from app.garments.models import Garment
 from app.garments.crud import wear
+from app.activities.models import Activity
+from app.exceptions.exceptions import NotFoundException
 import random
 from datetime import date
 from typing import List
@@ -14,7 +16,7 @@ logger = logging.getLogger(__name__)
 def _filter_garment_for_type(garments, garment_type):
     filtered_garments = garments.filter(Garment.garment_type == garment_type)
     if filtered_garments.count() == 0:
-        raise Exception(f"No garment of type {garment_type} found")
+        raise NotFoundException(f"No garment of type {garment_type} found")
     return filtered_garments.offset(
         int(filtered_garments.count() * random.random())
     ).first()
@@ -65,8 +67,13 @@ def get_outfits_for_date(db: Session, date: date):
 
 
 def get_outfit_for_place_and_activity(db: Session, place: str, activity):
-    types = ["socks", "underpants", "pants", "tshirt", "shoe"]
+    db_activity = db.query(Activity).filter(Activity.name == activity).first()
+    if not db_activity:
+        raise NotFoundException(f"Activity {activity} not found")
+    types = [garment_type.name for garment_type in db_activity.garment_types]
     outfit = _generate_outfit(db, place, activity, types)
+    if not outfit:
+        raise NotFoundException(f"No outfit available for {place} and {activity}")
     return schemas.Outfit(
         id=outfit.id,
         activity=outfit.activity,

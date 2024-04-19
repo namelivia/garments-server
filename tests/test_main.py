@@ -70,6 +70,9 @@ class TestApp:
         }
         data.update(activity)
         db_activity = Activity(**data)
+        garment_types = activity["garment_types"] if "garment_types" in activity else []
+        for garment_type in garment_types:
+            db_activity.garment_types.append(garment_type)
         session.add(db_activity)
         session.commit()
         return db_activity
@@ -713,7 +716,27 @@ class TestApp:
     def test_get_outfit_by_place_type_and_activity(self, client, database_test_session):
         key = uuid.uuid4()
         everyday_activity = self._insert_test_activity(
-            database_test_session, {"name": "everyday"}
+            database_test_session,
+            {
+                "name": "everyday",
+                "garment_types": [
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "socks"}
+                    ),
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "underpants"}
+                    ),
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "pants"}
+                    ),
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "tshirt"}
+                    ),
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "shoe"}
+                    ),
+                ],
+            },
         )
         self._insert_test_garment(
             database_test_session,
@@ -850,7 +873,7 @@ class TestApp:
             ],
         }
 
-    def test_when_there_are_no_availabe_garments_for_outfit_400_is_returned(
+    def test_when_there_are_no_availabe_garments_for_outfit_404_is_returned(
         self, client, database_test_session
     ):
         key = uuid.uuid4()
@@ -861,8 +884,19 @@ class TestApp:
                 "journaling_key": key,
             },
         )
+        self._insert_test_activity(
+            database_test_session,
+            {
+                "name": "everyday",
+                "garment_types": [
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "socks"}
+                    ),
+                ],
+            },
+        )
         response = client.get("/outfits/new?place=home&activity=everyday")
-        assert response.status_code == 400
+        assert response.status_code == 404
         assert response.json() == {"detail": "No garment of type socks found"}
 
     def test_wear_outfit(self, client, database_test_session):
