@@ -738,12 +738,26 @@ class TestApp:
                 ],
             },
         )
+        running_activity = self._insert_test_activity(
+            database_test_session,
+            {
+                "name": "running",
+                "garment_types": [
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "socks"}
+                    ),
+                    self._insert_test_garment_type(
+                        database_test_session, {"name": "shoe"}
+                    ),
+                ],
+            },
+        )
         self._insert_test_garment(
             database_test_session,
             {
                 "garment_type": "socks",
                 "journaling_key": key,
-                "activities": [everyday_activity],
+                "activities": [everyday_activity, running_activity],
             },
         )
         self._insert_test_garment(
@@ -775,15 +789,15 @@ class TestApp:
             {
                 "garment_type": "shoe",
                 "journaling_key": key,
-                "activities": [everyday_activity],
+                "activities": [everyday_activity, running_activity],
             },
         )
-        response = client.get("/outfits/new?place=home&activity=everyday")
+        response = client.get("/outfits/new?place=home&activity=running")
         assert response.status_code == 200
         assert response.json() == {
             "id": 1,
             "worn_on": None,
-            "activity": "everyday",
+            "activity": "running",
             "garments": [
                 {
                     "id": 1,
@@ -800,58 +814,10 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
-                    "activities": [{"id": 1, "name": "everyday"}],
-                },
-                {
-                    "id": 2,
-                    "name": "Test garment",
-                    "garment_type": "underpants",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                    "activities": [{"id": 1, "name": "everyday"}],
-                },
-                {
-                    "id": 3,
-                    "name": "Test garment",
-                    "garment_type": "pants",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                    "activities": [{"id": 1, "name": "everyday"}],
-                },
-                {
-                    "id": 4,
-                    "name": "Test garment",
-                    "garment_type": "tshirt",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                    "activities": [{"id": 1, "name": "everyday"}],
+                    "activities": [
+                        {"id": 1, "name": "everyday"},
+                        {"id": 2, "name": "running"},
+                    ],
                 },
                 {
                     "id": 5,
@@ -868,7 +834,10 @@ class TestApp:
                     "total_worn": 0,
                     "washing": False,
                     "thrown_away": False,
-                    "activities": [{"id": 1, "name": "everyday"}],
+                    "activities": [
+                        {"id": 1, "name": "everyday"},
+                        {"id": 2, "name": "running"},
+                    ],
                 },
             ],
         }

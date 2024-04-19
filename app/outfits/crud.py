@@ -27,7 +27,7 @@ def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
         Garment.washing == False,
         Garment.thrown_away == False,
         Garment.place == place,
-        Garment.activity == activity,
+        Garment.activities.any(Activity.name == activity),
     )
     garments = []
     for garment_type in types:
@@ -66,7 +66,7 @@ def get_outfits_for_date(db: Session, date: date):
     ]
 
 
-def get_outfit_for_place_and_activity(db: Session, place: str, activity):
+def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
     db_activity = db.query(Activity).filter(Activity.name == activity).first()
     if not db_activity:
         raise NotFoundException(f"Activity {activity} not found")
