@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import logging
 from . import models, schemas
 from app.garments.models import Garment
-from app.garments.crud import wear
+from app.garments.crud import wear, reject
 from app.activities.models import Activity
 from app.exceptions.exceptions import NotFoundException
 import random
@@ -90,6 +90,7 @@ def reject_outfit_garment(db: Session, outfit: models.Outfit, garment_id: int):
     garment = db.query(Garment).filter(Garment.id == garment_id).first()
     if not garment:
         raise NotFoundException(f"Garment {garment_id} not found")
+    reject(db, garment)
     outfit.garments.remove(garment)
 
     new_garment_query = db.query(Garment).filter(

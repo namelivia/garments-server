@@ -25,6 +25,7 @@ class Garment(Base):
     journaling_key = Column(GUID, nullable=False)
     worn = Column(Integer, nullable=False)
     total_worn = Column(Integer, nullable=False)
+    times_rejected = Column(Integer, nullable=False)
     wear_to_wash = Column(Integer, nullable=False)
     washing = Column(Boolean, nullable=False)
     thrown_away = Column(Boolean, nullable=False)

@@ -148,6 +148,21 @@ def wear(db: Session, garment: models.Garment):
     return garment
 
 
+def reject(db: Session, garment: models.Garment):
+    garment.times_rejected += 1
+    db.commit()
+    db.refresh(garment)
+    logger.info("Rejecting garment {garment.name}")
+    try:
+        Journaling.create(
+            garment.journaling_key,
+            f"Rejecting {garment.name}",
+        )
+    except Exception as err:
+        logger.error(f"Could not add journal entry: {str(err)}")
+    return garment
+
+
 def wash(db: Session, garment: models.Garment):
     garment.worn = 0
     garment.washing = False
