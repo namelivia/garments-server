@@ -4,6 +4,7 @@ from app.dependencies import get_db
 from . import crud, schemas
 from sqlalchemy.orm import Session
 from app.journaling.journaling import Journaling
+from app.exceptions.exceptions import NotFoundException
 from datetime import date
 from typing import List
 
@@ -14,8 +15,8 @@ router = APIRouter(prefix="/outfits", dependencies=[Depends(get_db)])
 def new_outfit(place: str, activity: str, db: Session = Depends(get_db)):
     try:
         return crud.get_outfit_for_place_and_activity(db, place, activity)
-    except Exception as e:
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=str(e))
+    except NotFoundException as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))
 
 
 def _get_outfit(db: Session, outfit_id: int):
