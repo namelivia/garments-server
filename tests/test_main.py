@@ -658,6 +658,7 @@ class TestApp:
             "status": "ok",
             "journaling_key": str(key),
             "wear_to_wash": 9,
+            "times_rejected": 0,
             "worn": 0,
             "total_worn": 2,
             "washing": True,

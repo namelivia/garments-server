@@ -75,6 +75,7 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
         journaling_key=uuid.uuid4(),
         worn=0,
         total_worn=0,
+        times_rejected=0,
         washing=False,
         thrown_away=False,
     )
