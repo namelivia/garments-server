@@ -6,6 +6,7 @@ from app.garments.models import Garment
 from app.garments.crud import wear, reject
 from app.activities.models import Activity
 from app.exceptions.exceptions import NotFoundException
+from app.weather.weather import get_weather
 import random
 from datetime import date
 from typing import List
@@ -66,11 +67,18 @@ def get_outfits_for_date(db: Session, date: date):
     ]
 
 
-def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
+def _get_garment_types_for_activity_and_weather(
+    db: Session, activity: str, weather: str
+):
     db_activity = db.query(Activity).filter(Activity.name == activity).first()
     if not db_activity:
         raise NotFoundException(f"Activity {activity} not found")
-    types = [garment_type.name for garment_type in db_activity.garment_types]
+    return [garment_type.name for garment_type in db_activity.garment_types]
+
+
+def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
+    weather = get_weather(place)
+    types = _get_garment_types_for_activity_and_weather(db, activity, weather)
     outfit = _generate_outfit(db, place, activity, types)
     if not outfit:
         raise NotFoundException(f"No outfit available for {place} and {activity}")
