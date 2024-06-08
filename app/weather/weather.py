@@ -2,11 +2,9 @@ import requests
 
 
 def get_weather(place: str):
-    latitude = 40.4111175
-    longitude = -3.7056138
     try:
         response = requests.get(
-            f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin&forecast_days=1"
+            f"https://api.open-meteo.com/v1/forecast?latitude={place.latitude}&longitude={place.longitude}&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin&forecast_days=1"
         )
         data = response.json()
         max_temperature = data["daily"]["temperature_2m_max"][0]
