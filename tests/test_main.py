@@ -58,6 +58,8 @@ class TestApp:
     def _insert_test_place(self, session, place: dict = {}):
         data = {
             "name": "Test place",
+            "latitude": "0.00001",
+            "longitude": "0.0001",
         }
         data.update(place)
         db_place = Place(**data)
@@ -318,12 +320,16 @@ class TestApp:
             "/places",
             json={
                 "name": "Some test place",
+                "latitude": "1.0",
+                "longitude": "1.0",
             },
         )
         assert response.status_code == 201
         assert response.json() == {
             "id": 1,
             "name": "Some test place",
+            "latitude": "1.0",
+            "longitude": "1.0",
         }
 
     def test_get_all_places(self, client, database_test_session):
@@ -341,6 +347,8 @@ class TestApp:
             {
                 "id": 1,
                 "name": "test place 1",
+                "latitude": "0.00001",
+                "longitude": "0.0001",
             }
         ]
 
