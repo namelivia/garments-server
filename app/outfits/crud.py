@@ -5,6 +5,7 @@ from . import models, schemas
 from app.garments.models import Garment
 from app.garments.crud import wear, reject
 from app.activities.models import Activity
+from app.places.models import Place
 from app.exceptions.exceptions import NotFoundException
 from app.weather.weather import get_weather
 import random
@@ -77,7 +78,10 @@ def _get_garment_types_for_activity_and_weather(
 
 
 def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
-    weather = get_weather(place)
+    db_place = db.query(Place).filter(Place.name == place).first()
+    if not db_place:
+        raise NotFoundException(f"Place {place} not found")
+    weather = get_weather(db_place)
     types = _get_garment_types_for_activity_and_weather(db, activity, weather)
     outfit = _generate_outfit(db, place, activity, types)
     if not outfit:
