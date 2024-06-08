@@ -15,6 +15,26 @@ from app.garment_types.models import GarmentType
 from datetime import date
 from freezegun import freeze_time
 
+weather_api_response = {
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "generationtime_ms": 0.01704692840576172,
+    "utc_offset_seconds": 7200,
+    "timezone": "Europe/Berlin",
+    "timezone_abbreviation": "CEST",
+    "elevation": 0.0,
+    "daily_units": {
+        "time": "iso8601",
+        "temperature_2m_max": "°C",
+        "temperature_2m_min": "°C",
+    },
+    "daily": {
+        "time": ["2024-06-08"],
+        "temperature_2m_max": [25.2],
+        "temperature_2m_min": [24.7],
+    },
+}
+
 
 @freeze_time("2013-04-09")
 class TestApp:
@@ -736,8 +756,17 @@ class TestApp:
             "thrown_away": True,
         }
 
-    def test_get_outfit_by_place_type_and_activity(self, client, database_test_session):
+    @patch("requests.get")
+    def test_get_outfit_by_place_type_and_activity(
+        self, m_get, client, database_test_session
+    ):
         key = uuid.uuid4()
+        m_get.return_value = Mock()
+        m_get.return_value.json.return_value = weather_api_response
+        home = self._insert_test_place(
+            database_test_session,
+            {"name": "home", "latitude": "0.00001", "longitude": "0.0001"},
+        )
         everyday_activity = self._insert_test_activity(
             database_test_session,
             {
@@ -867,10 +896,17 @@ class TestApp:
             ],
         }
 
-    def test_when_there_are_no_availabe_garments_for_outfit_404_is_returned(
-        self, client, database_test_session
+    @patch("requests.get")
+    def test_when_there_are_no_available_garments_for_outfit_404_is_returned(
+        self, m_get, client, database_test_session
     ):
         key = uuid.uuid4()
+        m_get.return_value = Mock()
+        m_get.return_value.json.return_value = weather_api_response
+        home = self._insert_test_place(
+            database_test_session,
+            {"name": "home", "latitude": "0.00001", "longitude": "0.0001"},
+        )
         self._insert_test_garment(
             database_test_session,
             {
