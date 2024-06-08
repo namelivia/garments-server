@@ -9,6 +9,7 @@ activity_garment_type = Table(
     Base.metadata,
     Column("activity_id", ForeignKey("activities.id")),
     Column("garment_type_id", ForeignKey("garment_types.id")),
+    Column("weather", String, nullable=False),
 )
 
 
