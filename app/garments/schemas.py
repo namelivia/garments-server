@@ -35,7 +35,7 @@ class Garment(GarmentBase):
     activities: List[Activity] = Field(title="Activities for the outfit")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class JournalEntryBase(BaseModel):

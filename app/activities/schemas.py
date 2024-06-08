@@ -13,4 +13,4 @@ class Activity(ActivityBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
