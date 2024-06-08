@@ -13,7 +13,7 @@ class GarmentBase(BaseModel):
     place: str = Field(title="Place of the garment")
     activity: str = Field(title="Activity for the garment")
     wear_to_wash: int = Field(title="Times to wear before washing")
-    image: Optional[str] = Field(title="Image url for the garment")
+    image: Optional[str] = Field(None, title="Image url for the garment")
 
 
 class GarmentCreate(GarmentBase):
