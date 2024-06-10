@@ -74,7 +74,10 @@ def _get_garment_types_for_activity_and_weather(
     db_activity = db.query(Activity).filter(Activity.name == activity).first()
     if not db_activity:
         raise NotFoundException(f"Activity {activity} not found")
-    return [garment_type.name for garment_type in db_activity.garment_types]
+    return [
+        activity_garment_type.garment_type.name
+        for activity_garment_type in db_activity.garment_types
+    ]
 
 
 def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):

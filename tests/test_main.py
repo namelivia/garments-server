@@ -470,6 +470,85 @@ class TestApp:
         everyday_activity = self._insert_test_activity(
             database_test_session, {"name": "everyday"}
         )
+        socks = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "socks",
+            },
+        )
+        underpants = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "underpants",
+            },
+        )
+        pants = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "pants",
+            },
+        )
+        tshirt = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "tshirt",
+            },
+        )
+        shoe = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "shoe",
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": underpants.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": pants.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": tshirt.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": shoe.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": running_activity.id,
+                "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": running_activity.id,
+                "garment_type_id": shoe.id,
+            },
+        )
         self._insert_test_garment(
             database_test_session,
             {
@@ -788,6 +867,85 @@ class TestApp:
                 "name": "running",
             },
         )
+        socks = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "socks",
+            },
+        )
+        underpants = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "underpants",
+            },
+        )
+        pants = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "pants",
+            },
+        )
+        tshirt = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "tshirt",
+            },
+        )
+        shoe = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "shoe",
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": underpants.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": pants.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": tshirt.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": shoe.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": running_activity.id,
+                "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": running_activity.id,
+                "garment_type_id": shoe.id,
+            },
+        )
         self._insert_test_garment(
             database_test_session,
             {
@@ -898,12 +1056,26 @@ class TestApp:
                 "journaling_key": key,
             },
         )
-        self._insert_test_activity(
+        everyday = self._insert_test_activity(
             database_test_session,
             {
                 "name": "everyday",
             },
         )
+        socks = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "socks",
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday.id,
+                "garment_type_id": socks.id,
+            },
+        )
+
         response = client.get("/outfits/new?place=home&activity=everyday")
         assert response.status_code == 404
         assert response.json() == {"detail": "No garment of type socks found"}
@@ -952,6 +1124,20 @@ class TestApp:
                 "name": "everyday",
             },
         )
+        shoe = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "Shoe",
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": shoe.id,
+            },
+        )
+
         garments = [
             self._insert_test_garment(
                 database_test_session,
