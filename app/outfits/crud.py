@@ -4,7 +4,7 @@ import logging
 from . import models, schemas
 from app.garments.models import Garment
 from app.garments.crud import wear, reject
-from app.activities.models import Activity
+from app.activities.models import Activity, ActivityGarmentType
 from app.places.models import Place
 from app.exceptions.exceptions import NotFoundException
 from app.weather.weather import get_weather
@@ -74,9 +74,15 @@ def _get_garment_types_for_activity_and_weather(
     db_activity = db.query(Activity).filter(Activity.name == activity).first()
     if not db_activity:
         raise NotFoundException(f"Activity {activity} not found")
+
+    activity_garment_types = db.query(ActivityGarmentType).filter(
+        ActivityGarmentType.activity_id == db_activity.id,
+        ActivityGarmentType.weather == weather,
+    )
+
     return [
         activity_garment_type.garment_type.name
-        for activity_garment_type in db_activity.garment_types
+        for activity_garment_type in activity_garment_types
     ]
 
 
