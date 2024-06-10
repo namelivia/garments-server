@@ -103,7 +103,7 @@ class TestApp:
         data = {
             "activity_id": 1,
             "garment_type_id": 1,
-            "weather": "cold",
+            "weather": "hot",
         }
         data.update(activity_garment_type)
         db_activity_garment_type = ActivityGarmentType(**data)
@@ -932,11 +932,14 @@ class TestApp:
                 "garment_type_id": shoe.id,
             },
         )
+        # This will be excluded because it is for cold weather
+        # and the fixture temperature is "hot"
         self._insert_test_activity_garment_type(
             database_test_session,
             {
                 "activity_id": running_activity.id,
                 "garment_type_id": socks.id,
+                "weather": "cold",
             },
         )
         self._insert_test_activity_garment_type(
@@ -993,27 +996,6 @@ class TestApp:
             "worn_on": None,
             "activity": "running",
             "garments": [
-                {
-                    "id": 1,
-                    "name": "Test garment",
-                    "garment_type": "socks",
-                    "image": None,
-                    "color": "red",
-                    "place": "home",
-                    "activity": "everyday",
-                    "status": "ok",
-                    "journaling_key": str(key),
-                    "wear_to_wash": 1,
-                    "worn": 0,
-                    "total_worn": 0,
-                    "times_rejected": 0,
-                    "washing": False,
-                    "thrown_away": False,
-                    "activities": [
-                        {"id": 1, "name": "everyday"},
-                        {"id": 2, "name": "running"},
-                    ],
-                },
                 {
                     "id": 5,
                     "name": "Test garment",
