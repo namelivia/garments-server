@@ -9,3 +9,4 @@ class Outfit(BaseModel):
     worn_on: Optional[datetime.datetime] = Field(title="When was the outfit worn")
     garments: List[Garment] = Field(title="Garments for the outfit")
     activity: str = Field(title="Activity for the outfit")
+    weather: str = Field(title="Weather for the outfit")

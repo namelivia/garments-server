@@ -18,3 +18,4 @@ class Outfit(Base):
     activity = Column(String, nullable=False)
     garments = relationship(Garment, secondary=outfit_garment)
     worn_on = Column(DateTime)
+    weather = Column(String, nullable=False)

@@ -68,6 +68,7 @@ class TestApp:
         key = uuid.uuid4()
         data = {
             "activity": "everyday",
+            "weather": "hot",
         }
         data.update(outfit)
         db_outfit = Outfit(**data)
@@ -995,6 +996,7 @@ class TestApp:
             "id": 1,
             "worn_on": None,
             "activity": "running",
+            "weather": "hot",
             "garments": [
                 {
                     "id": 5,
@@ -1089,12 +1091,14 @@ class TestApp:
                 "worn_on": "2013-04-09T00:00:00",
                 "garments": [],
                 "activity": "everyday",
+                "weather": "hot",
             },
             {
                 "id": 2,
                 "worn_on": "2013-04-09T00:00:00",
                 "garments": [],
                 "activity": "everyday",
+                "weather": "hot",
             },
         ]
 
@@ -1168,4 +1172,5 @@ class TestApp:
                 }
             ],
             "activity": "everyday",
+            "weather": "hot",
         }

@@ -24,7 +24,9 @@ def _filter_garment_for_type(garments, garment_type):
     ).first()
 
 
-def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
+def _generate_outfit(
+    db: Session, place: str, weather: str, activity: str, types: List[str]
+):
     query = db.query(Garment).filter(
         Garment.washing == False,
         Garment.thrown_away == False,
@@ -35,7 +37,7 @@ def _generate_outfit(db: Session, place: str, activity: str, types: List[str]):
     for garment_type in types:
         garments.append(_filter_garment_for_type(query, garment_type))
 
-    db_outfit = models.Outfit(garments=garments, activity=activity)
+    db_outfit = models.Outfit(garments=garments, activity=activity, weather=weather)
     db.add(db_outfit)
     db.commit()
     db.refresh(db_outfit)
@@ -50,6 +52,7 @@ def wear_outfit(db: Session, outfit: models.Outfit):
     return schemas.Outfit(
         id=outfit.id,
         activity=outfit.activity,
+        weather=outfit.weather,
         garments=outfit.garments,
         worn_on=outfit.worn_on,
     )
@@ -61,6 +64,7 @@ def get_outfits_for_date(db: Session, date: date):
         schemas.Outfit(
             id=outfit.id,
             activity=outfit.activity,
+            weather=outfit.weather,
             garments=outfit.garments,
             worn_on=outfit.worn_on,
         )
@@ -92,12 +96,13 @@ def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
         raise NotFoundException(f"Place {place} not found")
     weather = get_weather(db_place)
     types = _get_garment_types_for_activity_and_weather(db, activity, weather)
-    outfit = _generate_outfit(db, place, activity, types)
+    outfit = _generate_outfit(db, place, weather, activity, types)
     if not outfit:
         raise NotFoundException(f"No outfit available for {place} and {activity}")
     return schemas.Outfit(
         id=outfit.id,
         activity=outfit.activity,
+        weather=outfit.weather,
         garments=outfit.garments,
         worn_on=outfit.worn_on,
     )
@@ -128,6 +133,7 @@ def reject_outfit_garment(db: Session, outfit: models.Outfit, garment_id: int):
     return schemas.Outfit(
         id=outfit.id,
         activity=outfit.activity,
+        weather=outfit.weather,
         garments=outfit.garments,
         worn_on=outfit.worn_on,
     )
