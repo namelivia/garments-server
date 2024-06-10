@@ -10,7 +10,7 @@ from .test_base import (
 from app.garments.models import Garment
 from app.outfits.models import Outfit
 from app.places.models import Place
-from app.activities.models import Activity
+from app.activities.models import Activity, ActivityGarmentType
 from app.garment_types.models import GarmentType
 from datetime import date
 from freezegun import freeze_time
@@ -93,12 +93,23 @@ class TestApp:
         }
         data.update(activity)
         db_activity = Activity(**data)
-        garment_types = activity["garment_types"] if "garment_types" in activity else []
-        for garment_type in garment_types:
-            db_activity.garment_types.append(garment_type)
         session.add(db_activity)
         session.commit()
         return db_activity
+
+    def _insert_test_activity_garment_type(
+        self, session, activity_garment_type: dict = {}
+    ):
+        data = {
+            "activity_id": 1,
+            "garment_type_id": 1,
+            "weather": "cold",
+        }
+        data.update(activity_garment_type)
+        db_activity_garment_type = ActivityGarmentType(**data)
+        session.add(db_activity_garment_type)
+        session.commit()
+        return db_activity_garment_type
 
     def _insert_test_garment_type(self, session, garment_type: dict = {}):
         data = {
@@ -769,39 +780,12 @@ class TestApp:
         )
         everyday_activity = self._insert_test_activity(
             database_test_session,
-            {
-                "name": "everyday",
-                "garment_types": [
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "socks"}
-                    ),
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "underpants"}
-                    ),
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "pants"}
-                    ),
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "tshirt"}
-                    ),
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "shoe"}
-                    ),
-                ],
-            },
+            {"name": "everyday"},
         )
         running_activity = self._insert_test_activity(
             database_test_session,
             {
                 "name": "running",
-                "garment_types": [
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "socks"}
-                    ),
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "shoe"}
-                    ),
-                ],
             },
         )
         self._insert_test_garment(
@@ -918,11 +902,6 @@ class TestApp:
             database_test_session,
             {
                 "name": "everyday",
-                "garment_types": [
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "socks"}
-                    ),
-                ],
             },
         )
         response = client.get("/outfits/new?place=home&activity=everyday")
@@ -971,11 +950,6 @@ class TestApp:
             database_test_session,
             {
                 "name": "everyday",
-                "garment_types": [
-                    self._insert_test_garment_type(
-                        database_test_session, {"name": "Shoe"}
-                    ),
-                ],
             },
         )
         garments = [
