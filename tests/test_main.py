@@ -1174,3 +1174,13 @@ class TestApp:
             "activity": "everyday",
             "weather": "hot",
         }
+
+    @patch("requests.get")
+    def test_get_weather(self, m_get, database_test_session, client):
+        self._insert_test_place(database_test_session, {"name": "home"})
+        m_get.return_value = Mock()
+        m_get.return_value.json.return_value = weather_api_response
+        m_get.return_value = Mock()
+        m_get.return_value.json.return_value = weather_api_response
+        response = client.get("/weather?place=home")
+        assert response.json() == {"weather": "hot"}

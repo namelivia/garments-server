@@ -10,9 +10,9 @@ def get_weather(place: str):
         max_temperature = data["daily"]["temperature_2m_max"][0]
         min_temperature = data["daily"]["temperature_2m_min"][0]
         avg_temperature = (max_temperature + min_temperature) / 2
-        if avg_temperature < 10:
+        if avg_temperature < 5:
             return "cold"
-        elif avg_temperature < 20:
+        elif avg_temperature < 10:
             return "mild"
         else:
             return "hot"
