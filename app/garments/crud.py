@@ -5,6 +5,7 @@ import uuid
 from . import models, schemas
 from app.journaling.journaling import Journaling
 from app.activities.models import Activity
+from app.notifications.notifications import Notifications
 import random
 
 logger = logging.getLogger(__name__)
@@ -136,6 +137,10 @@ def wear(db: Session, garment: models.Garment):
     garment.worn += 1
     garment.total_worn += 1
     garment.washing = garment.worn >= garment.wear_to_wash
+    if garment.washing and garment.wear_to_wash > 1:
+        Notifications.send(
+            f"Garment {garment.name} has been worn {garment.worn} times and needs to be washed"
+        )
     db.commit()
     db.refresh(garment)
     logger.info("Wearing garment {garment.name}")

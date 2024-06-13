@@ -724,7 +724,10 @@ class TestApp:
             "thrown_away": False,
         }
 
-    def test_wear_garment_sets_washing(self, client, database_test_session):
+    @patch("app.notifications.notifications.Notifications.send")
+    def test_wear_garment_sets_washing(
+        self, m_send_notification, client, database_test_session
+    ):
         key = uuid.uuid4()
         self._insert_test_garment(
             database_test_session,
@@ -749,6 +752,9 @@ class TestApp:
             "washing": True,
             "thrown_away": False,
         }
+        m_send_notification.assert_any_call(
+            "Garment Test garment has been worn 3 times and needs to be washed",
+        )
 
     def test_sending_garment_to_wash_garment(self, client, database_test_session):
         key = uuid.uuid4()
