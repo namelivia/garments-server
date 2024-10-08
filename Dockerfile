@@ -2,8 +2,8 @@
 FROM python:3.10 AS builder
 WORKDIR /app
 COPY . /app
-RUN apk update
-RUN apk add postgresql-dev gcc python3-dev musl-dev make libffi-dev openssl-dev git cargo g++
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends libpq-dev gcc python3-dev musl-dev make libffi-dev libssl-dev git cargo g++
 RUN pip install poetry
 
 FROM builder AS development
