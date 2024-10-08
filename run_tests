@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it garments-server-app pipenv run pytest -vvv $@
+docker exec -it garments-server-app poetry run pytest -vvv $@
