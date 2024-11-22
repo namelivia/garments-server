@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "app"
-version = "2.0.0"
+version = "2.0.1"
 description = "App to manage garments"
 authors = ["José Ignacio Amelivia Santiago <hello@namelivia.com>"]
 readme = "README.md"

@@ -1189,4 +1189,10 @@ class TestApp:
         m_get.return_value = Mock()
         m_get.return_value.json.return_value = weather_api_response
         response = client.get("/weather?place=home")
-        assert response.json() == {"weather": "hot"}
+        assert response.json() == {
+            "weather": {
+                "min": 24.7,
+                "avg": 24.95,
+                "max": 25.2,
+            }
+        }
