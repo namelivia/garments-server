@@ -6,7 +6,7 @@ from . import crud, schemas
 router = APIRouter(prefix="/weather", dependencies=[Depends(get_db)])
 
 
-@router.get("/", response_model=schemas.Weather)
+@router.get("", response_model=schemas.Weather)
 def get_weather(
     db: Session = Depends(get_db),
     place: str = None,
