@@ -7,6 +7,7 @@ from app.images.api import router as images
 from app.users.api import router as users
 from app.outfits.api import router as outfits
 from app.weather.api import router as weather
+from app.rules.api import router as rules
 from app.garment_types.api import router as garment_types
 import logging
 import sys
@@ -36,5 +37,6 @@ app.add_middleware(
         garment_types,
         outfits,
         weather,
+        rules,
     ]
 ]

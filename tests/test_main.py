@@ -1182,10 +1182,8 @@ class TestApp:
         }
 
     @patch("requests.get")
-    def test_get_weather(self, m_get, database_test_session, client):
+    def test_get_weather(self, m_get, client, database_test_session):
         self._insert_test_place(database_test_session, {"name": "home"})
-        m_get.return_value = Mock()
-        m_get.return_value.json.return_value = weather_api_response
         m_get.return_value = Mock()
         m_get.return_value.json.return_value = weather_api_response
         response = client.get("/weather?place=home")
@@ -1196,3 +1194,26 @@ class TestApp:
                 "max": 25.2,
             }
         }
+
+    def test_get_rules(self, client, database_test_session):
+        everyday_activity = self._insert_test_activity(
+            database_test_session, {"name": "everyday"}
+        )
+        socks = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "socks",
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": socks.id,
+            },
+        )
+        response = client.get("/rules")
+        assert response.status_code == 200
+        assert response.json() == [
+            {"activity_id": 1, "garment_type_id": 1, "weather": "hot"}
+        ]
