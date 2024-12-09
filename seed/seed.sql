@@ -23,3 +23,7 @@ INSERT INTO garments (id, name, garment_type, color, status, journaling_key, ima
 INSERT INTO garments (id, name, garment_type, color, status, journaling_key, image, place, activity) VALUES (6, 'Test garment 6', 'Test Garment Type 2', 'Test color 2', 'Test status 2', gen_random_uuid(), 'some_image_url_2', 'Test Place 1', 'Test Activity 2');
 INSERT INTO garments (id, name, garment_type, color, status, journaling_key, image, place, activity) VALUES (7, 'Test garment 7', 'Test Garment Type 1', 'Test color 1', 'Test status 1', gen_random_uuid(), 'some_image_url_3', 'Test Place 1', 'Test Activity 2');
 INSERT INTO garments (id, name, garment_type, color, status, journaling_key, image, place, activity) VALUES (8, 'Test garment 8', 'Test Garment Type 2', 'Test color 2', 'Test status 2', gen_random_uuid(), 'some_image_url_4', 'Test Place 2', 'Test Activity 2');
+
+--Insert some rules
+INSERT INTO activity_garment_type(weather, activity_id, garment_type_id) VALUES ('cold', 1, 1);
+INSERT INTO activity_garment_type(weather, activity_id, garment_type_id) VALUES ('hot', 1, 2);

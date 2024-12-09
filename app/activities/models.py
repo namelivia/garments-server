@@ -16,6 +16,7 @@ class ActivityGarmentType(Base):
     )
     weather = Column("weather", String, nullable=False)
     garment_type: Mapped["GarmentType"] = relationship()
+    activity: Mapped["Activity"] = relationship()
 
 
 class Activity(Base):
