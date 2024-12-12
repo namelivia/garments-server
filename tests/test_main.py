@@ -1215,5 +1215,17 @@ class TestApp:
         response = client.get("/rules")
         assert response.status_code == 200
         assert response.json() == [
-            {"activity_id": 1, "garment_type_id": 1, "weather": "hot"}
+            {
+                "activity_id": 1,
+                "activity": {
+                    "id": 1,
+                    "name": "everyday",
+                },
+                "garment_type_id": 1,
+                "garment_type": {
+                    "id": 1,
+                    "name": "socks",
+                },
+                "weather": "hot",
+            }
         ]
