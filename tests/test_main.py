@@ -1205,11 +1205,38 @@ class TestApp:
                 "name": "socks",
             },
         )
+        pants = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "pants",
+            },
+        )
+        tshirt = self._insert_test_garment_type(
+            database_test_session,
+            {
+                "name": "tshirt",
+            },
+        )
         self._insert_test_activity_garment_type(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": pants.id,
+            },
+        )
+        self._insert_test_activity_garment_type(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": tshirt.id,
+                "weather": "cold",
             },
         )
         response = client.get("/rules")
@@ -1227,5 +1254,31 @@ class TestApp:
                     "name": "socks",
                 },
                 "weather": "hot",
-            }
+            },
+            {
+                "activity_id": 1,
+                "activity": {
+                    "id": 1,
+                    "name": "everyday",
+                },
+                "garment_type_id": 2,
+                "garment_type": {
+                    "id": 2,
+                    "name": "pants",
+                },
+                "weather": "hot",
+            },
+            {
+                "activity_id": 1,
+                "activity": {
+                    "id": 1,
+                    "name": "everyday",
+                },
+                "garment_type_id": 3,
+                "garment_type": {
+                    "id": 3,
+                    "name": "tshirt",
+                },
+                "weather": "cold",
+            },
         ]
