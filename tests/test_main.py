@@ -1282,3 +1282,25 @@ class TestApp:
                 "weather": "cold",
             },
         ]
+
+    def test_create_rule(self, client, database_test_session):
+        garment_type = self._insert_test_garment_type(
+            database_test_session, {"name": "test garment type 1"}
+        )
+        activity = self._insert_test_activity(
+            database_test_session, {"name": "test activity 1"}
+        )
+        response = client.post(
+            "/rules",
+            json={
+                "activity_id": garment_type.id,
+                "garment_type_id": activity.id,
+                "weather": "hot",
+            },
+        )
+        assert response.status_code == 201
+        assert response.json() == {
+            "activity_id": activity.id,
+            "garment_type_id": garment_type.id,
+            "weather": "hot",
+        }
