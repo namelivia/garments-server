@@ -1293,8 +1293,8 @@ class TestApp:
         response = client.post(
             "/rules",
             json={
-                "activity_id": garment_type.id,
-                "garment_type_id": activity.id,
+                "activity": activity.name,
+                "garment_type": garment_type.name,
                 "weather": "hot",
             },
         )

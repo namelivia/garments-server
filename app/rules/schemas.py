@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ActivityGarmentTypeBase(BaseModel):
-    activity_id: int
-    garment_type_id: int
-    weather: str
+    garment_type: str = Field(title="Type of the garment")
+    activity: str = Field(title="Activity for the garment")
+    weather: str = Field(title="Weather for the garment")
 
 
 class ActivityGarmentTypeCreate(ActivityGarmentTypeBase):
