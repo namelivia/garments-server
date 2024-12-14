@@ -98,19 +98,17 @@ class TestApp:
         session.commit()
         return db_activity
 
-    def _insert_test_activity_garment_type(
-        self, session, activity_garment_type: dict = {}
-    ):
+    def _insert_test_rule(self, session, rule: dict = {}):
         data = {
             "activity_id": 1,
             "garment_type_id": 1,
             "weather": "hot",
         }
-        data.update(activity_garment_type)
-        db_activity_garment_type = ActivityGarmentType(**data)
-        session.add(db_activity_garment_type)
+        data.update(rule)
+        db_rule = ActivityGarmentType(**data)
+        session.add(db_rule)
         session.commit()
-        return db_activity_garment_type
+        return db_rule
 
     def _insert_test_garment_type(self, session, garment_type: dict = {}):
         data = {
@@ -501,49 +499,49 @@ class TestApp:
                 "name": "shoe",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": socks.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": underpants.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": pants.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": tshirt.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": shoe.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": running_activity.id,
                 "garment_type_id": socks.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": running_activity.id,
@@ -904,35 +902,35 @@ class TestApp:
                 "name": "shoe",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": socks.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": underpants.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": pants.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": tshirt.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
@@ -941,7 +939,7 @@ class TestApp:
         )
         # This will be excluded because it is for cold weather
         # and the fixture temperature is "hot"
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": running_activity.id,
@@ -949,7 +947,7 @@ class TestApp:
                 "weather": "cold",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": running_activity.id,
@@ -1058,7 +1056,7 @@ class TestApp:
                 "name": "socks",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday.id,
@@ -1122,7 +1120,7 @@ class TestApp:
                 "name": "Shoe",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
@@ -1217,21 +1215,21 @@ class TestApp:
                 "name": "tshirt",
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": socks.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": pants.id,
             },
         )
-        self._insert_test_activity_garment_type(
+        self._insert_test_rule(
             database_test_session,
             {
                 "activity_id": everyday_activity.id,

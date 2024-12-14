@@ -7,7 +7,7 @@ from app.garment_types.models import GarmentType
 
 
 class ActivityGarmentType(Base):
-    __tablename__ = "activity_garment_type"
+    __tablename__ = "rules"
     activity_id: Mapped[int] = mapped_column(
         ForeignKey("activities.id"), primary_key=True
     )
