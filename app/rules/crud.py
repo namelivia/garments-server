@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session, joinedload
-from app.activities.models import Rule, Activity
+from app.activities.models import Activity
+from .models import Rule
 from app.garment_types.models import GarmentType
 
 

@@ -4,7 +4,8 @@ import logging
 from . import models, schemas
 from app.garments.models import Garment
 from app.garments.crud import wear, reject
-from app.activities.models import Activity, Rule
+from app.activities.models import Activity
+from app.rules.models import Rule
 from app.places.models import Place
 from app.exceptions.exceptions import NotFoundException
 from app.weather.weather import get_simplified_weather

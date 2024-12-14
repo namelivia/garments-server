@@ -10,7 +10,8 @@ from .test_base import (
 from app.garments.models import Garment
 from app.outfits.models import Outfit
 from app.places.models import Place
-from app.activities.models import Activity, Rule
+from app.activities.models import Activity
+from app.rules.models import Rule
 from app.garment_types.models import GarmentType
 from datetime import date
 from freezegun import freeze_time
