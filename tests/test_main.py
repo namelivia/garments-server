@@ -1220,6 +1220,7 @@ class TestApp:
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": socks.id,
+                "weather": "hot",
             },
         )
         self._insert_test_rule(
@@ -1227,6 +1228,7 @@ class TestApp:
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": pants.id,
+                "weather": "hot",
             },
         )
         self._insert_test_rule(
@@ -1234,6 +1236,14 @@ class TestApp:
             {
                 "activity_id": everyday_activity.id,
                 "garment_type_id": tshirt.id,
+                "weather": "cold",
+            },
+        )
+        self._insert_test_rule(
+            database_test_session,
+            {
+                "activity_id": everyday_activity.id,
+                "garment_type_id": pants.id,
                 "weather": "cold",
             },
         )
@@ -1276,6 +1286,19 @@ class TestApp:
                 "garment_type": {
                     "id": 3,
                     "name": "tshirt",
+                },
+                "weather": "cold",
+            },
+            {
+                "activity_id": 1,
+                "activity": {
+                    "id": 1,
+                    "name": "everyday",
+                },
+                "garment_type_id": 2,
+                "garment_type": {
+                    "id": 2,
+                    "name": "pants",
                 },
                 "weather": "cold",
             },

@@ -14,7 +14,7 @@ class Rule(Base):
     garment_type_id: Mapped[int] = mapped_column(
         ForeignKey("garment_types.id"), primary_key=True
     )
-    weather = Column("weather", String, nullable=False)
+    weather = Column("weather", String, nullable=False, primary_key=True)
     garment_type: Mapped["GarmentType"] = relationship()
     activity: Mapped["Activity"] = relationship()
 
