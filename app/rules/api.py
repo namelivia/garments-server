@@ -7,15 +7,15 @@ from . import crud, schemas
 router = APIRouter(prefix="/rules", dependencies=[Depends(get_db)])
 
 
-# @router.get("", response_model=List[schemas.ActivityGarmentType])
+# @router.get("", response_model=List[schemas.Rule])
 @router.get("")
 def get_rules(db: Session = Depends(get_db)):
-    return crud.get_activity_garment_types(db)
+    return crud.get_rules(db)
 
 
 @router.post(
     "",
     status_code=HTTPStatus.CREATED,
 )
-def create_rule(rule: schemas.ActivityGarmentTypeCreate, db: Session = Depends(get_db)):
-    return crud.create_activity_garment_type(db, rule)
+def create_rule(rule: schemas.RuleCreate, db: Session = Depends(get_db)):
+    return crud.create_rule(db, rule)

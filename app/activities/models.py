@@ -6,7 +6,7 @@ from typing import List
 from app.garment_types.models import GarmentType
 
 
-class ActivityGarmentType(Base):
+class Rule(Base):
     __tablename__ = "rules"
     activity_id: Mapped[int] = mapped_column(
         ForeignKey("activities.id"), primary_key=True
@@ -23,4 +23,4 @@ class Activity(Base):
     __tablename__ = "activities"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    garment_types: Mapped[List["ActivityGarmentType"]] = relationship()
+    garment_types: Mapped[List["Rule"]] = relationship()

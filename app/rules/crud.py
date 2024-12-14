@@ -1,20 +1,20 @@
 from sqlalchemy.orm import Session, joinedload
-from app.activities.models import ActivityGarmentType, Activity
+from app.activities.models import Rule, Activity
 from app.garment_types.models import GarmentType
 
 
-def get_activity_garment_types(db: Session):
+def get_rules(db: Session):
     return (
-        db.query(ActivityGarmentType)
+        db.query(Rule)
         .options(
-            joinedload(ActivityGarmentType.garment_type),
-            joinedload(ActivityGarmentType.activity),
+            joinedload(Rule.garment_type),
+            joinedload(Rule.activity),
         )
         .all()
     )
 
 
-def create_activity_garment_type(db: Session, rule):
+def create_rule(db: Session, rule):
     activity = db.query(Activity).filter(Activity.name == rule.activity).first()
     if not activity:
         raise ValueError(f"Activity {rule.activity} not found")
@@ -23,7 +23,7 @@ def create_activity_garment_type(db: Session, rule):
     )
     if not garment_type:
         raise ValueError(f"Garment type {rule.garment_type} not found")
-    db_rule = ActivityGarmentType(
+    db_rule = Rule(
         activity_id=activity.id,
         garment_type_id=garment_type.id,
         weather=rule.weather,

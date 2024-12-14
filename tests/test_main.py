@@ -10,7 +10,7 @@ from .test_base import (
 from app.garments.models import Garment
 from app.outfits.models import Outfit
 from app.places.models import Place
-from app.activities.models import Activity, ActivityGarmentType
+from app.activities.models import Activity, Rule
 from app.garment_types.models import GarmentType
 from datetime import date
 from freezegun import freeze_time
@@ -105,7 +105,7 @@ class TestApp:
             "weather": "hot",
         }
         data.update(rule)
-        db_rule = ActivityGarmentType(**data)
+        db_rule = Rule(**data)
         session.add(db_rule)
         session.commit()
         return db_rule
