@@ -21,7 +21,7 @@ class Garment(Base):
     color = Column(String, nullable=False)
     status = Column(String, nullable=False)
     place = Column(String, nullable=False)
-    activity = Column(String, nullable=False)
+    activity = Column(String, nullable=False, default="None")
     journaling_key = Column(GUID, nullable=False)
     worn = Column(Integer, nullable=False)
     total_worn = Column(Integer, nullable=False)

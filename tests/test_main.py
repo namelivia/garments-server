@@ -122,9 +122,12 @@ class TestApp:
         return db_garment_type
 
     @patch("uuid.uuid4")
-    def test_create_garment(self, m_uuid, client):
+    def test_create_garment(self, m_uuid, client, database_test_session):
         key = "271c973a-638f-4e01-9a79-308c880e3d11"
         m_uuid.return_value = key
+        activity = self._insert_test_activity(
+            database_test_session, {"name": "everyday"}
+        )
         response = client.post(
             "/garments",
             json={
@@ -145,7 +148,7 @@ class TestApp:
             "image": None,
             "color": "white",
             "place": "home",
-            "activity": "everyday",
+            "activity": "None",
             "status": "ok",
             "journaling_key": key,
             "wear_to_wash": 2,
@@ -154,7 +157,12 @@ class TestApp:
             "times_rejected": 0,
             "washing": False,
             "thrown_away": False,
-            "activities": [],
+            "activities": [
+                {
+                    "id": 1,
+                    "name": "everyday",
+                }
+            ],
         }
 
     def test_get_non_existing_garment(self, client):

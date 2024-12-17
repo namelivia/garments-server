@@ -6,6 +6,7 @@ from . import models, schemas
 from app.journaling.journaling import Journaling
 from app.activities.models import Activity
 from app.notifications.notifications import Notifications
+from app.exceptions.exceptions import NotFoundException
 import random
 
 logger = logging.getLogger(__name__)
@@ -72,7 +73,7 @@ def get_thrown_away_garments(db: Session):
 
 def create_garment(db: Session, garment: schemas.GarmentCreate):
     db_garment = models.Garment(
-        **garment.dict(),
+        **garment.dict(exclude={"activity"}),
         journaling_key=uuid.uuid4(),
         worn=0,
         total_worn=0,
@@ -80,6 +81,10 @@ def create_garment(db: Session, garment: schemas.GarmentCreate):
         washing=False,
         thrown_away=False,
     )
+    activity = db.query(Activity).filter(Activity.name == garment.activity).first()
+    if not activity:
+        raise NotFoundException(f"Activity {garment.activity} not found")
+    db_garment.activities.append(activity)
     db.add(db_garment)
     db.commit()
     db.refresh(db_garment)
