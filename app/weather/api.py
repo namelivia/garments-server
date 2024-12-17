@@ -12,3 +12,8 @@ def get_weather(
     place: str = None,
 ):
     return schemas.Weather(weather=crud.get_weather_for_place(db, place))
+
+
+@router.get("/configuration")
+def get_configuration():
+    return crud.get_weather_configuration()

@@ -1334,3 +1334,26 @@ class TestApp:
             "garment_type_id": garment_type.id,
             "weather": "hot",
         }
+
+    def test_get_weather_configuration(self, client, database_test_session):
+        # Insert some configuration
+        # Ask for the configuration
+        response = client.get("/weather/configuration")
+        assert response.status_code == 200
+        assert [
+            {
+                "name": "cold",
+                "min": -100,
+                "max": 5,
+            },
+            {
+                "name": "mild",
+                "min": 5,
+                "max": 16,
+            },
+            {
+                "name": "hot",
+                "min": 16,
+                "max": 100,
+            },
+        ]

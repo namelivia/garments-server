@@ -21,6 +21,26 @@ def get_complete_weather(place: str):
         raise Exception(f"Error getting weather for {place}: {e}") from e
 
 
+def get_configuration():
+    return [
+        {
+            "name": "cold",
+            "min": -100,
+            "max": 5,
+        },
+        {
+            "name": "mild",
+            "min": 5,
+            "max": 16,
+        },
+        {
+            "name": "hot",
+            "min": 16,
+            "max": 100,
+        },
+    ]
+
+
 def get_simplified_weather(place: str):
     try:
         response = requests.get(_get_weather_query(place))
@@ -28,11 +48,10 @@ def get_simplified_weather(place: str):
         max_temperature = data["daily"]["temperature_2m_max"][0]
         min_temperature = data["daily"]["temperature_2m_min"][0]
         avg_temperature = (max_temperature + min_temperature) / 2
-        if avg_temperature < 5:
-            return "cold"
-        elif avg_temperature < 16:
-            return "mild"
-        else:
-            return "hot"
+        configuration = get_configuration()
+        for config in configuration:
+            if config["min"] <= avg_temperature <= config["max"]:
+                return config["name"]
+        raise Exception(f"Temperature {avg_temperature} not found in configuration")
     except Exception as e:
         raise Exception(f"Error getting weather for {place}: {e}") from e
