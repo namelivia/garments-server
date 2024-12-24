@@ -144,7 +144,7 @@ def wear(db: Session, garment: models.Garment):
     garment.washing = garment.worn >= garment.wear_to_wash
     db.commit()
     db.refresh(garment)
-    logger.info("Wearing garment {garment.name}")
+    logger.info(f"Wearing garment {garment.name}")
     try:
         if garment.washing and garment.wear_to_wash > 1:
             Notifications.send(
