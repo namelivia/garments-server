@@ -182,7 +182,7 @@ def wash(db: Session, garment: models.Garment):
     garment.washing = False
     db.commit()
     db.refresh(garment)
-    logger.info("Washing garment {garment.name}")
+    logger.info(f"Washing garment {garment.name}")
     try:
         Journaling.create(
             garment.journaling_key,
@@ -198,7 +198,7 @@ def throw_away(db: Session, garment: models.Garment):
     garment.thrown_away = True
     db.commit()
     db.refresh(garment)
-    logger.info("Throwing away garment {garment.name}")
+    logger.info(f"Throwing away garment {garment.name}")
     try:
         Journaling.create(
             garment.journaling_key,
