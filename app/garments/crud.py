@@ -142,13 +142,16 @@ def wear(db: Session, garment: models.Garment):
     garment.worn += 1
     garment.total_worn += 1
     garment.washing = garment.worn >= garment.wear_to_wash
-    if garment.washing and garment.wear_to_wash > 1:
-        Notifications.send(
-            f"Garment {garment.name} has been worn {garment.worn} times and needs to be washed"
-        )
     db.commit()
     db.refresh(garment)
     logger.info("Wearing garment {garment.name}")
+    try:
+        if garment.washing and garment.wear_to_wash > 1:
+            Notifications.send(
+                f"Garment {garment.name} has been worn {garment.worn} times and needs to be washed"
+            )
+    except Exception as err:
+        logger.error(f"Could not send notification: {str(err)}")
     try:
         Journaling.create(
             garment.journaling_key,
@@ -163,7 +166,7 @@ def reject(db: Session, garment: models.Garment):
     garment.times_rejected += 1
     db.commit()
     db.refresh(garment)
-    logger.info("Rejecting garment {garment.name}")
+    logger.info(f"Rejecting garment {garment.name}")
     try:
         Journaling.create(
             garment.journaling_key,
