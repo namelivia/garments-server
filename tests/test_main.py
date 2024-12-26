@@ -1414,15 +1414,15 @@ class TestApp:
         self._insert_test_weather_range(
             database_test_session,
             {
-                "name": "cold",
-                "max": 5,
+                "name": "mild",
+                "max": 16,
             },
         )
         self._insert_test_weather_range(
             database_test_session,
             {
-                "name": "mild",
-                "max": 16,
+                "name": "cold",
+                "max": 5,
             },
         )
         self._insert_test_weather_range(

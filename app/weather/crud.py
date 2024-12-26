@@ -13,4 +13,4 @@ def get_weather_for_place(db: Session, place: str):
 
 
 def get_weather_configuration(db: Session):
-    return db.query(models.WeatherRange).all()
+    return db.query(models.WeatherRange).order_by(models.WeatherRange.max).all()
