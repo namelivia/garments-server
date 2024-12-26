@@ -15,5 +15,5 @@ def get_weather(
 
 
 @router.get("/configuration")
-def get_configuration():
-    return crud.get_weather_configuration()
+def get_configuration(db: Session = Depends(get_db)):
+    return crud.get_weather_configuration(db)

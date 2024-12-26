@@ -11,6 +11,7 @@ from app.garments.models import Garment
 from app.outfits.models import Outfit
 from app.places.models import Place
 from app.activities.models import Activity
+from app.weather.models import WeatherRange
 from app.rules.models import Rule
 from app.garment_types.models import GarmentType
 from datetime import date
@@ -76,6 +77,17 @@ class TestApp:
         session.add(db_outfit)
         session.commit()
         return db_outfit
+
+    def _insert_test_weather_range(self, session, weather_range: dict = {}):
+        data = {
+            "name": "hot",
+            "max": 30,
+        }
+        data.update(weather_range)
+        db_range = WeatherRange(**data)
+        session.add(db_range)
+        session.commit()
+        return db_range
 
     def _insert_test_place(self, session, place: dict = {}):
         data = {
@@ -567,6 +579,27 @@ class TestApp:
                 "activities": [everyday_activity],
             },
         )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "cold",
+                "max": 5,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "mild",
+                "max": 16,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "hot",
+                "max": 100,
+            },
+        )
         self._insert_test_garment(
             database_test_session,
             {
@@ -1003,6 +1036,27 @@ class TestApp:
                 "activities": [everyday_activity, running_activity],
             },
         )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "cold",
+                "max": 5,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "mild",
+                "max": 16,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "hot",
+                "max": 100,
+            },
+        )
         response = client.get("/outfits/new?place=home&activity=running")
         assert response.status_code == 200
         assert response.json() == {
@@ -1070,6 +1124,27 @@ class TestApp:
             {
                 "activity_id": everyday.id,
                 "garment_type_id": socks.id,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "cold",
+                "max": 5,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "mild",
+                "max": 16,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "hot",
+                "max": 100,
             },
         )
 
@@ -1336,24 +1411,40 @@ class TestApp:
         }
 
     def test_get_weather_configuration(self, client, database_test_session):
-        # Insert some configuration
-        # Ask for the configuration
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "cold",
+                "max": 5,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "mild",
+                "max": 16,
+            },
+        )
+        self._insert_test_weather_range(
+            database_test_session,
+            {
+                "name": "hot",
+                "max": 100,
+            },
+        )
         response = client.get("/weather/configuration")
         assert response.status_code == 200
         assert [
             {
                 "name": "cold",
-                "min": -100,
                 "max": 5,
             },
             {
                 "name": "mild",
-                "min": 5,
                 "max": 16,
             },
             {
                 "name": "hot",
-                "min": 16,
                 "max": 100,
             },
         ]

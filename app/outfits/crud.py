@@ -92,7 +92,7 @@ def get_outfit_for_place_and_activity(db: Session, place: str, activity: str):
     db_place = db.query(Place).filter(Place.name == place).first()
     if not db_place:
         raise NotFoundException(f"Place {place} not found")
-    weather = get_simplified_weather(db_place)
+    weather = get_simplified_weather(db, db_place)
     types = _get_garment_types_for_activity_and_weather(db, activity, weather)
     outfit = _generate_outfit(db, place, weather, activity, types)
     if not outfit:

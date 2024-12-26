@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from app.places.models import Place
 from app.exceptions.exceptions import NotFoundException
-from .weather import get_complete_weather, get_configuration
+from .weather import get_complete_weather
+from . import models
 
 
 def get_weather_for_place(db: Session, place: str):
@@ -11,5 +12,5 @@ def get_weather_for_place(db: Session, place: str):
     return get_complete_weather(db_place)
 
 
-def get_weather_configuration():
-    return get_configuration()
+def get_weather_configuration(db: Session):
+    return db.query(models.WeatherRange).all()

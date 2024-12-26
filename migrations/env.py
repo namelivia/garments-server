@@ -13,6 +13,7 @@ from app.activities.models import *
 from app.outfits.models import *
 from app.garment_types.models import *
 from app.users.models import *
+from app.weather.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

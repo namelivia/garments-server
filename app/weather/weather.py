@@ -1,4 +1,6 @@
 import requests
+from . import models
+from sqlalchemy.orm import Session
 
 
 def _get_weather_query(place: str):
@@ -21,33 +23,16 @@ def get_complete_weather(place: str):
         raise Exception(f"Error getting weather for {place}: {e}") from e
 
 
-def get_configuration():
-    return [
-        {
-            "name": "cold",
-            "max": 5,
-        },
-        {
-            "name": "mild",
-            "max": 16,
-        },
-        {
-            "name": "hot",
-            "max": 100,
-        },
-    ]
-
-
-def get_simplified_weather(place: str):
+def get_simplified_weather(db: Session, place: str):
     try:
         response = requests.get(_get_weather_query(place))
         data = response.json()
         max_temperature = data["daily"]["temperature_2m_max"][0]
         min_temperature = data["daily"]["temperature_2m_min"][0]
         avg_temperature = (max_temperature + min_temperature) / 2
-        for config in get_configuration():
-            if avg_temperature <= config["max"]:
-                return config["name"]
+        for weather_range in db.query(models.WeatherRange).all():
+            if avg_temperature <= weather_range.max:
+                return weather_range.name
         raise Exception(f"Temperature {avg_temperature} not found in configuration")
     except Exception as e:
         raise Exception(f"Error getting weather for {place}: {e}") from e
