@@ -30,7 +30,9 @@ def get_simplified_weather(db: Session, place: str):
         max_temperature = data["daily"]["temperature_2m_max"][0]
         min_temperature = data["daily"]["temperature_2m_min"][0]
         avg_temperature = (max_temperature + min_temperature) / 2
-        for weather_range in db.query(models.WeatherRange).all():
+        for weather_range in (
+            db.query(models.WeatherRange).order_by(models.WeatherRange.max).all()
+        ):
             if avg_temperature <= weather_range.max:
                 return weather_range.name
         raise Exception(f"Temperature {avg_temperature} not found in configuration")
